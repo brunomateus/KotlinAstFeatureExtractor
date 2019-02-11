@@ -50,7 +50,7 @@ class ASTExtractor : KtTreeVisitorVoid() {
 			is KtObjectDeclaration -> element.name
 			is KtAnonymousInitializer -> element.text //TODO
 			is KtNamedFunction -> element.name
-			is KtDestructuringDeclaration -> element.text //TODO
+			is KtDestructuringDeclaration -> ""
 			is KtProperty -> "${element.valOrVarKeyword.text} ${element.name}" // should we inform if it is val or var ? if yes, how ?
 			is KtTypeAlias -> element.name
 			is KtSecondaryConstructor -> ""
@@ -117,7 +117,7 @@ class ASTExtractor : KtTreeVisitorVoid() {
 			is KtModifierList -> element.text
 
 			is KtSuperTypeCallEntry -> ""
-			is KtDestructuringDeclarationEntry -> element.text //TODO
+			is KtDestructuringDeclarationEntry -> element.text
 			is KtStringTemplateEntry -> element.text //TODO
 			is KtSuperExpression -> "super"
 			is KtCatchClause -> "catch"
