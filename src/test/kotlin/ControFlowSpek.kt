@@ -226,7 +226,104 @@ fun main(args: Array<String>) {
         }
     }
 
+    Feature("while statement") {
 
+        lateinit var rootNode: ASTNode
+        lateinit var code: String
+        lateinit var whileLoop: ASTNode
+
+        Scenario("Regular While") {
+
+            Given("A regular while with break"){
+                code = """"
+fun main(args: Array<String>) {
+	var x = args.size
+    while (x > 0) {
+    	x--
+    	if (x == 5) break
+	}
+}""".trimIndent()
+            }
+            When("the AST is retrieved") {
+                rootNode = getASTasJson(code)
+            }
+
+            Then("it should contain one WhileExpression") {
+                whileLoop = rootNode.getChild(2).getChild(1).getChild(1)
+                assertThat(whileLoop.type).isEqualTo("KtWhileExpression")
+                assertThat(whileLoop.label).isEqualTo("while")
+            }
+
+            And("the forExpression should have two children") {
+                assertThat(whileLoop.children).hasSize(2)
+            }
+
+            lateinit var whileBody: ASTNode
+
+            And("the two children should have empty labels"){
+                assertThat(whileLoop.getFirstChild().type).isEqualTo("KtContainerNode")
+                assertThat(whileLoop.getFirstChild().label).isEqualTo("")
+
+                whileBody = whileLoop.getChild(1)
+
+                assertThat(whileBody.type).isEqualTo("KtContainerNodeForControlStructureBody")
+                assertThat(whileBody.label).isEqualTo("")
+            }
+
+            And("The break expression should have a label break"){
+                val breakExpression = whileBody.getFirstChild().getChild(1).getChild(1).getFirstChild()
+                assertThat(breakExpression.type).isEqualTo("KtBreakExpression")
+                assertThat(breakExpression.label).isEqualTo("break")
+            }
+        }
+
+        Scenario("Do While") {
+
+            Given("A do while with continue"){
+                code = """"
+fun main(args: Array<String>) {
+	var x = args.size
+    do {
+    	if (x % 2 == 0) continue
+    	x--
+	} while (x > 0)
+}""".trimIndent()
+            }
+            When("the AST is retrieved") {
+                rootNode = getASTasJson(code)
+            }
+
+            Then("it should contain one DoWhileExpression") {
+                whileLoop = rootNode.getChild(2).getChild(1).getChild(1)
+                assertThat(whileLoop.type).isEqualTo("KtDoWhileExpression")
+                assertThat(whileLoop.label).isEqualTo("do-while")
+            }
+
+            And("the forExpression should have two children") {
+                assertThat(whileLoop.children).hasSize(2)
+            }
+
+            lateinit var doWhileBody: ASTNode
+
+            And("the two children should have empty labels"){
+                doWhileBody = whileLoop.getFirstChild()
+
+                assertThat(doWhileBody.type).isEqualTo("KtContainerNodeForControlStructureBody")
+                assertThat(doWhileBody.label).isEqualTo("")
+
+
+                assertThat(whileLoop.getChild(1).type).isEqualTo("KtContainerNode")
+                assertThat(whileLoop.getChild(1).label).isEqualTo("")
+            }
+
+            And("The continue expression should have a label continue"){
+                val continueExpression = doWhileBody.getFirstChild().getFirstChild().getChild(1).getFirstChild()
+                assertThat(continueExpression.type).isEqualTo("KtContinueExpression")
+                assertThat(continueExpression.label).isEqualTo("continue")
+            }
+        }
+
+    }
 
 })
 
