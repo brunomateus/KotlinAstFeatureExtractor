@@ -486,6 +486,99 @@ fun hasPrefix(x: Any) = when(x) {
 
     }
 
+    Feature("If statement") {
+
+        lateinit var rootNode: ASTNode
+        lateinit var code: String
+        lateinit var ifExpression: ASTNode
+
+        Scenario("If without else") {
+
+            Given("A if with only one branch") {
+                code = """"
+fun main(args: Array<String>) {
+			val a = 5
+			var b = 7
+			var max = a
+			if (a < b) max = b
+		}
+""".trimIndent()
+            }
+            When("the AST is retrieved") {
+                rootNode = getASTasJson(code)
+            }
+
+            Then("it should contain one IfExpression") {
+                ifExpression = rootNode.getChild(2).getChild(1).getChild(3)
+                assertThat(ifExpression.type).isEqualTo("KtIfExpression")
+                assertThat(ifExpression.label).isEqualTo("if")
+
+            }
+
+            And("the whenExpression should have two children") {
+                assertThat(ifExpression.children).hasSize(2)
+            }
+
+            And("The KtContainerNode should contain a binaryExpression"){
+                assertThat(ifExpression.getFirstChild().type).isEqualTo("KtContainerNode")
+                assertThat(ifExpression.getFirstChild().label).isEqualTo("")
+
+                assertThat(ifExpression.getFirstChild().getFirstChild().type).isEqualTo("KtBinaryExpression")
+                assertThat(ifExpression.getFirstChild().getFirstChild().label).isEqualTo("")
+            }
+
+            And("The KtContainerNodeForControlStructureBody should have a empty label"){
+                assertThat(ifExpression.getChild(1).type).isEqualTo("KtContainerNodeForControlStructureBody")
+                assertThat(ifExpression.getChild(1).label).isEqualTo("")
+            }
+        }
+
+        Scenario("If with else") {
+
+            Given("A if with else") {
+                code = """
+fun main(args: Array<String>) {
+			val a = 5
+			var b = 7
+			var max = 0
+			if (a < b) max = b else max = a
+		}
+""".trimIndent()
+            }
+            When("the AST is retrieved") {
+                rootNode = getASTasJson(code)
+            }
+
+            Then("it should contain one IfExpression") {
+                ifExpression = rootNode.getChild(2).getChild(1).getChild(3)
+                assertThat(ifExpression.type).isEqualTo("KtIfExpression")
+                assertThat(ifExpression.label).isEqualTo("if")
+
+            }
+
+            And("the whenExpression should have three children") {
+                assertThat(ifExpression.children).hasSize(3)
+            }
+
+            And("The KtContainerNode should contain a binaryExpression"){
+                assertThat(ifExpression.getFirstChild().type).isEqualTo("KtContainerNode")
+                assertThat(ifExpression.getFirstChild().label).isEqualTo("")
+
+                assertThat(ifExpression.getFirstChild().getFirstChild().type).isEqualTo("KtBinaryExpression")
+                assertThat(ifExpression.getFirstChild().getFirstChild().label).isEqualTo("")
+            }
+
+            And("It should contain two KtContainerNodeForControlStructureBody with empty labels"){
+                assertThat(ifExpression.getChild(1).type).isEqualTo("KtContainerNodeForControlStructureBody")
+                assertThat(ifExpression.getChild(1).label).isEqualTo("")
+
+                assertThat(ifExpression.getChild(2).type).isEqualTo("KtContainerNodeForControlStructureBody")
+                assertThat(ifExpression.getChild(2).label).isEqualTo("")
+            }
+        }
+
+    }
+
 })
 
 private fun printAST(node: ASTNode) {
