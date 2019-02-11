@@ -60,9 +60,6 @@ fun main(args: Array<String>) {
                 assertThat(forExpression.getChild(2).type).isEqualTo("KtContainerNodeForControlStructureBody")
                 assertThat(forExpression.getChild(2).label).isEqualTo("")
             }
-            afterGroup {
-                printAST(rootNode)
-            }
         }
 
         Scenario("For each with RangeExpressions") {
@@ -254,7 +251,7 @@ fun main(args: Array<String>) {
                 assertThat(whileLoop.label).isEqualTo("while")
             }
 
-            And("the forExpression should have two children") {
+            And("the WhileExpression should have two children") {
                 assertThat(whileLoop.children).hasSize(2)
             }
 
@@ -299,7 +296,7 @@ fun main(args: Array<String>) {
                 assertThat(whileLoop.label).isEqualTo("do-while")
             }
 
-            And("the forExpression should have two children") {
+            And("the DoWhileExpression should have two children") {
                 assertThat(whileLoop.children).hasSize(2)
             }
 
@@ -321,6 +318,170 @@ fun main(args: Array<String>) {
                 assertThat(continueExpression.type).isEqualTo("KtContinueExpression")
                 assertThat(continueExpression.label).isEqualTo("continue")
             }
+        }
+
+    }
+
+    Feature("When statement") {
+
+        lateinit var rootNode: ASTNode
+        lateinit var code: String
+        lateinit var whenExpression: ASTNode
+
+        Scenario("Condition with Expressions") {
+
+            Given("A when that uses conditions with expressions") {
+                code = """"
+fun main(args: Array<String>) {
+		val language = if (args.size == 0) "EN" else args[0]
+		when (language) {
+			"EN" -> "Hello!"
+			"FR" -> "Salut!"
+			"IT" -> "Ciao!"
+			else -> "Sorry, I can't greet you in language yet"
+		}
+	}
+""".trimIndent()
+            }
+            When("the AST is retrieved") {
+                rootNode = getASTasJson(code)
+            }
+
+            Then("it should contain one WhenExpression") {
+                whenExpression = rootNode.getChild(2).getChild(1).getChild(1)
+                assertThat(whenExpression.type).isEqualTo("KtWhenExpression")
+                assertThat(whenExpression.label).isEqualTo("when")
+
+            }
+
+            And("the whenExpression should have five children") {
+                assertThat(whenExpression.children).hasSize(5)
+            }
+
+            And("the first childen should correpond to the variable been evaluated"){
+                assertThat(whenExpression.getFirstChild().type).isEqualTo("KtNameReferenceExpression")
+                assertThat(whenExpression.getFirstChild().label).isEqualTo("language")
+            }
+
+            And("Each children, except the last one, should be a KtWhenEntry with two children each") {
+                val conditions = listOf("\"EN\"", "\"FR\"", "\"IT\"")
+                for (i in 1..3) {
+                    val whenEntry = whenExpression.getChild(i)
+                    assertThat(whenEntry.type).isEqualTo("KtWhenEntry")
+                    assertThat(whenEntry.label).isEqualTo("")
+
+                    assertThat(whenEntry.children)
+                        .hasSize(2)
+
+                    assertThat(whenEntry.getFirstChild().type).isEqualTo("KtWhenConditionWithExpression")
+                    assertThat(whenEntry.getFirstChild().label).isEqualTo(conditions[i - 1])
+                }
+            }
+
+            And("The last children should be a Else") {
+                assertThat(whenExpression.getChild(4).type).isEqualTo("KtWhenEntry")
+                assertThat(whenExpression.getChild(4).label).isEqualTo("else")
+            }
+        }
+
+        Scenario("Range conditions"){
+
+            Given("A when that uses range conditions"){
+                code = """"
+fun main(args: Array<String>) {
+		when (x) {
+			in 1..10 -> print("x is in the range")
+			in validNumbers -> print("x is valid")
+			!in 10..20 -> print("x is outside the range")
+			else -> print("none of the above")
+		}
+	}
+""".trimIndent()
+            }
+            When("the AST is retrieved") {
+                rootNode = getASTasJson(code)
+            }
+
+            Then("it should contain one WhenExpression") {
+                whenExpression = rootNode.getChild(2).getChild(1).getFirstChild()
+                assertThat(whenExpression.type).isEqualTo("KtWhenExpression")
+                assertThat(whenExpression.label).isEqualTo("when")
+
+            }
+
+            And("the whenExpression should have five children") {
+                assertThat(whenExpression.children).hasSize(5)
+            }
+
+            And("the first childen should correpond to the variable been evaluated"){
+                assertThat(whenExpression.getFirstChild().type).isEqualTo("KtNameReferenceExpression")
+                assertThat(whenExpression.getFirstChild().label).isEqualTo("x")
+            }
+
+            And("Each children, except the first and the last one, should be a KtWhenEntry with two children each"){
+                val conditions = listOf("in 1..10", "in validNumbers", "!in 10..20")
+                for (i in 1..3) {
+                    val whenEntry = whenExpression.getChild(i)
+                    assertThat(whenEntry.type).isEqualTo("KtWhenEntry")
+                    assertThat(whenEntry.label).isEqualTo("")
+
+                    assertThat(whenEntry.children)
+                        .hasSize(2)
+
+                    assertThat(whenEntry.getFirstChild().type).isEqualTo("KtWhenConditionInRange")
+                    assertThat(whenEntry.getFirstChild().label).isEqualTo(conditions[i - 1])
+                }
+            }
+
+            And("The last children should be a Else"){
+                assertThat(whenExpression.getChild(4).type).isEqualTo("KtWhenEntry")
+                assertThat(whenExpression.getChild(4).label).isEqualTo("else")
+            }
+
+        }
+
+        Scenario("Using the 'is' pattern"){
+
+            Given("A when that uses the pattern 'is'"){
+                code = """
+fun hasPrefix(x: Any) = when(x) {
+    		is String -> x.startsWith("prefix")
+			else -> false
+}
+
+""".trimIndent()
+            }
+            When("the AST is retrieved") {
+                rootNode = getASTasJson(code)
+            }
+
+            Then("it should contain one WhenExpression") {
+                whenExpression = rootNode.getChild(2).getChild(1)
+                assertThat(whenExpression.type).isEqualTo("KtWhenExpression")
+                assertThat(whenExpression.label).isEqualTo("when")
+
+            }
+
+            And("the whenExpression should have three children") {
+                assertThat(whenExpression.children).hasSize(3)
+            }
+
+            And("The WhenEntry should have a KtWhenConditionIsPattern"){
+                val whenEntry = whenExpression.getChild(1)
+                assertThat(whenEntry.type).isEqualTo("KtWhenEntry")
+                assertThat(whenEntry.label).isEqualTo("")
+
+                assertThat(whenEntry.children).hasSize(2)
+
+                assertThat(whenEntry.getFirstChild().type).isEqualTo("KtWhenConditionIsPattern")
+                assertThat(whenEntry.getFirstChild().label).isEqualTo("is String")
+            }
+
+            And("The last children should be a Else"){
+                assertThat(whenExpression.getChild(2).type).isEqualTo("KtWhenEntry")
+                assertThat(whenExpression.getChild(2).label).isEqualTo("else")
+            }
+
         }
 
     }
