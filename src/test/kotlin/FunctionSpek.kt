@@ -256,6 +256,7 @@ fun read(b: Array<Byte>, off: Int = 0, len: Int = b.size) {
             }
             When("the AST is retrieved") {
                 rootNode = getASTasJson(code)
+                printAST(rootNode)
             }
 
             Then("it should contain one function named asList") {
@@ -312,6 +313,130 @@ fun read(b: Array<Byte>, off: Int = 0, len: Int = b.size) {
                 assertThat(returnType.type).isEqualTo("KtTypeReference")
                 assertThat(returnType.label).isEqualTo("List<T>")
             }
+
+        }
+
+
+    }
+
+    Feature("Kotlin Extension Function") {
+
+        lateinit var rootNode: ASTNode
+        lateinit var code: String
+        lateinit var namedFunctionNode: ASTNode
+
+        Scenario("Function with variable number of args") {
+
+            Given("A Extension function with a regular notation"){
+                code = """
+    fun <T> MutableList<T>.swap(index1: Int, index2: Int) {
+		val tmp = this[index1] // 'this' corresponds to the list
+		this[index1] = this[index2]
+		this[index2] = tmp
+	}
+""".trimIndent()
+            }
+            When("the AST is retrieved") {
+                rootNode = getASTasJson(code)
+            }
+
+            Then("it should contain one function named swap") {
+                namedFunctionNode = rootNode.getChild(2)
+                assertThat(namedFunctionNode.type).isEqualTo("KtNamedFunction")
+                assertThat(namedFunctionNode.label).isEqualTo("swap")
+            }
+
+            And("it should have four children") {
+                assertThat(namedFunctionNode.children).hasSize(4)
+            }
+
+            lateinit var typeParameterList: ASTNode
+            And("the first children should by a KtTypeParameterList"){
+                typeParameterList = namedFunctionNode.getFirstChild()
+                assertThat(typeParameterList.type).isEqualTo("KtTypeParameterList")
+                assertThat(typeParameterList.label).isEqualTo("")
+
+            }
+
+            And("it should contain one child whose type is KtTypeParameter and whose label should be T"){
+                assertThat(typeParameterList.getFirstChild().type).isEqualTo("KtTypeParameter")
+                assertThat(typeParameterList.getFirstChild().label).isEqualTo("T")
+            }
+
+            And("the second child should be A KtReceiverType, MutableList<T>"){
+                val receiverType = namedFunctionNode.getChild(1)
+                assertThat(receiverType.type).isEqualTo("KtTypeReference")
+                assertThat(receiverType.label).isEqualTo("MutableList<T>")
+            }
+
+
+            And("the second children should by a KtParameterList with size two"){
+                val parameterList = namedFunctionNode.getChild(2)
+                assertThat(parameterList.type).isEqualTo("KtParameterList")
+                assertThat(parameterList.label).isEqualTo("")
+
+                assertThat(parameterList.children).hasSize(2)
+
+            }
+
+        }
+
+        Scenario("Function with variable number of args") {
+
+            Given("A infix extension function"){
+                code = """
+    infix fun Int.shl(x: Int): Int {
+    }
+""".trimIndent()
+            }
+            When("the AST is retrieved") {
+                rootNode = getASTasJson(code)
+            }
+
+            Then("it should contain one function named shl") {
+                namedFunctionNode = rootNode.getChild(2)
+                assertThat(namedFunctionNode.type).isEqualTo("KtNamedFunction")
+                assertThat(namedFunctionNode.label).isEqualTo("shl")
+            }
+
+            And("it should have five children") {
+                assertThat(namedFunctionNode.children).hasSize(5)
+            }
+
+            And("the first children should by a KtModifierList and should contain the infix modifier"){
+                val modifierList = namedFunctionNode.getFirstChild()
+                assertThat(modifierList.type).isEqualTo("KtDeclarationModifierList")
+                assertThat(modifierList.label).isEqualTo("")
+
+                assertThat(modifierList.getFirstChild().type).isEqualTo("ModifierEntry")
+                assertThat(modifierList.getFirstChild().label).isEqualTo("infix")
+            }
+
+            And("the second children should by a KtTypeReference, Int"){
+                val receiverType = namedFunctionNode.getChild(1)
+                assertThat(receiverType.type).isEqualTo("KtTypeReference")
+                assertThat(receiverType.label).isEqualTo("Int")
+
+            }
+
+            And("the third children should by a KtParameterList"){
+                val parameterList = namedFunctionNode.getChild(2)
+                assertThat(parameterList.type).isEqualTo("KtParameterList")
+                assertThat(parameterList.label).isEqualTo("")
+            }
+
+            And("the fourth children should by a KtTypeReference which correspond to the return type, Int"){
+                val returnType = namedFunctionNode.getChild(3)
+                assertThat(returnType.type).isEqualTo("KtTypeReference")
+                assertThat(returnType.label).isEqualTo("Int")
+            }
+
+            And("The last children should be the function body, KtBlockExpression"){
+                val funcBody = namedFunctionNode.getChild(4)
+                assertThat(funcBody.type).isEqualTo("KtBlockExpression")
+                assertThat(funcBody.label).isEqualTo("")
+            }
+
 
         }
 
