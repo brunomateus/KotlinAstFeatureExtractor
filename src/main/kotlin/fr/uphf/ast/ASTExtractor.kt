@@ -38,7 +38,7 @@ class ASTExtractor : KtTreeVisitorVoid() {
 			is KtPostfixExpression -> ""
 			is KtPrefixExpression -> ""
 
-			is KtAnnotationEntry -> "@${if (element.useSiteTarget != null) element?.useSiteTarget?.text + ":" else ""}${element.typeReference?.text}"
+			is KtAnnotationEntry -> "@${if (element.useSiteTarget != null) element.useSiteTarget?.text + ":" else ""}${element.typeReference?.text}"
 			is KtAnnotationUseSiteTarget -> element.text
 			is KtAnnotation -> element.text
 			is KtParameter -> if (element.valOrVarKeyword != null) "${element.valOrVarKeyword?.text} ${element.name}" else element.name
@@ -65,7 +65,6 @@ class ASTExtractor : KtTreeVisitorVoid() {
 			is KtBinaryExpression -> ""
 			is KtQualifiedExpression -> ""
 			is KtUnaryExpression -> element.text //TODO
-			is KtBinaryExpression -> element.text //TODO
 			is KtIsExpression -> ""
 			is KtCallableReferenceExpression -> element.text
 			is KtClassLiteralExpression -> element.text //TODO

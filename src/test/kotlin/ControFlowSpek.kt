@@ -16,7 +16,6 @@ import org.jetbrains.kotlin.idea.KotlinFileType
 import org.jetbrains.kotlin.psi.KtFile
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.gherkin.Feature
-import java.io.File
 
 object ControFlowSpek : Spek({
     Feature("For statement") {
@@ -580,23 +579,3 @@ fun main(args: Array<String>) {
     }
 
 })
-
-private fun printAST(node: ASTNode) {
-    val builder = StringBuilder(Klaxon().toJsonString(node))
-    val content = (Parser().parse(builder) as JsonBase).toJsonString(true)
-    println(content)
-}
-
-val proj by lazy {
-    KotlinCoreEnvironment.createForProduction(
-        Disposer.newDisposable(),
-        CompilerConfiguration(),
-        EnvironmentConfigFiles.JVM_CONFIG_FILES
-    ).project
-}
-
-private fun getASTasJson(code: String): ASTNode {
-    val ktFile = PsiManager.getInstance(proj).findFile(LightVirtualFile("temp.kt", KotlinFileType.INSTANCE, code)) as KtFile
-    val parser = ASTExtractor()
-    return parser.getASTInJSON(ktFile)
-}
