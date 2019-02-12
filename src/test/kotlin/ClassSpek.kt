@@ -871,6 +871,167 @@ class Derived(b: Base) : Base by b
         }
     }
 
+    Feature("Enum class"){
+        lateinit var rootNode: ASTNode
+        lateinit var code: String
+        lateinit var ktclass: ASTNode
 
+        Scenario("A enum that has only constants"){
+
+            Given("A enum class that defines only constants"){
+                code = """
+enum class Direction {
+    NORTH, SOUTH, WEST, EAST
+}
+""".trimIndent()
+            }
+            When("the AST is retrieved") {
+                rootNode = getASTasJson(code)
+            }
+
+            val clsName = "Direction"
+            Then("it should contain one class named $clsName and the modifier enum") {
+                ktclass = rootNode.getChild(2)
+                assertThat(ktclass.type).isEqualTo("KtClass")
+                assertThat(ktclass.label).isEqualTo(clsName)
+
+                val modifierList = ktclass.getFirstChild()
+                assertThat(modifierList.type).isEqualTo("KtDeclarationModifierList")
+                assertThat(modifierList.label).isEqualTo("")
+
+                assertThat(modifierList.getFirstChild().type).isEqualTo("ModifierEntry")
+                assertThat(modifierList.getFirstChild().label).isEqualTo("enum")
+            }
+
+            val nChildren = 2
+            And("it should have $nChildren children") {
+                assertThat(ktclass.children).hasSize(nChildren)
+            }
+
+            And("it should have four constants defined, NORTH, SOUTH, WEST, EAST, respectively"){
+                val classBody = ktclass.getChild(1)
+
+                assertThat(classBody.children).hasSize(4)
+
+                assertThat(classBody.getFirstChild().type).isEqualTo("KtEnumEntry")
+                assertThat(classBody.getFirstChild().label).isEqualTo("NORTH")
+
+                assertThat(classBody.getChild(1).type).isEqualTo("KtEnumEntry")
+                assertThat(classBody.getChild(1).label).isEqualTo("SOUTH")
+
+                assertThat(classBody.getChild(2).type).isEqualTo("KtEnumEntry")
+                assertThat(classBody.getChild(2).label).isEqualTo("WEST")
+
+                assertThat(classBody.getChild(3).type).isEqualTo("KtEnumEntry")
+                assertThat(classBody.getChild(3).label).isEqualTo("EAST")
+
+            }
+        }
+
+        Scenario("A class with anonymous class"){
+
+            Given("A enum that has a abstract method"){
+                code = """
+enum class ProtocolState {
+    WAITING {
+        override fun signal() = TALKING
+    },
+
+    TALKING {
+        override fun signal() = WAITING
+    };
+
+    abstract fun signal(): ProtocolState
+}
+""".trimIndent()
+            }
+            When("the AST is retrieved") {
+                rootNode = getASTasJson(code)
+            }
+
+            val clsName = "ProtocolState"
+            Then("it should contain one class named $clsName and the modifier enum") {
+                ktclass = rootNode.getChild(2)
+                assertThat(ktclass.type).isEqualTo("KtClass")
+                assertThat(ktclass.label).isEqualTo(clsName)
+
+                val modifierList = ktclass.getFirstChild()
+                assertThat(modifierList.type).isEqualTo("KtDeclarationModifierList")
+                assertThat(modifierList.label).isEqualTo("")
+
+                assertThat(modifierList.getFirstChild().type).isEqualTo("ModifierEntry")
+                assertThat(modifierList.getFirstChild().label).isEqualTo("enum")
+            }
+
+            val nChildren = 2
+            And("it should have $nChildren children") {
+                assertThat(ktclass.children).hasSize(nChildren)
+            }
+
+            lateinit var classBody: ASTNode
+            Then("It should has a abstract method named signal"){
+                classBody = ktclass.getChild(1)
+                assertThat(classBody.children).hasSize(3)
+
+                assertThat(classBody.getChild(2).type).isEqualTo("KtNamedFunction")
+                assertThat(classBody.getChild(2).label).isEqualTo("signal")
+
+                val funcModifierList = classBody.getChild(2).getFirstChild()
+                assertThat(funcModifierList.type).isEqualTo("KtDeclarationModifierList")
+                assertThat(funcModifierList.label).isEqualTo("")
+
+                assertThat(funcModifierList.getFirstChild().type).isEqualTo("ModifierEntry")
+                assertThat(funcModifierList.getFirstChild().label).isEqualTo("abstract")
+            }
+
+            lateinit var const1: ASTNode
+            lateinit var const2: ASTNode
+            And("it should have two constants defined, WAITIING and TALKING, respectively"){
+
+                const1 = classBody.getFirstChild()
+                assertThat(const1.type).isEqualTo("KtEnumEntry")
+                assertThat(const1.label).isEqualTo("WAITING")
+
+                assertThat(const1.getFirstChild().type).isEqualTo("KtClassBody")
+                assertThat(const1.getFirstChild().label).isEqualTo("")
+
+                const2 = classBody.getChild(1)
+                assertThat(const2.type).isEqualTo("KtEnumEntry")
+                assertThat(const2.label).isEqualTo("TALKING")
+
+                assertThat(const2.getFirstChild().type).isEqualTo("KtClassBody")
+                assertThat(const2.getFirstChild().label).isEqualTo("")
+
+            }
+
+            And("Both constants should overrid the method signal"){
+
+                val firstContFunc = const1.getFirstChild().getFirstChild()
+                assertThat(firstContFunc.type).isEqualTo("KtNamedFunction")
+                assertThat(firstContFunc.label).isEqualTo("signal")
+
+                val firstConstFuncModifierList = firstContFunc.getFirstChild()
+
+                assertThat(firstConstFuncModifierList.type).isEqualTo("KtDeclarationModifierList")
+                assertThat(firstConstFuncModifierList.label).isEqualTo("")
+
+                assertThat(firstConstFuncModifierList.getFirstChild().type).isEqualTo("ModifierEntry")
+                assertThat(firstConstFuncModifierList.getFirstChild().label).isEqualTo("override")
+
+
+                val secConstFunc = const2.getFirstChild().getFirstChild()
+                assertThat(secConstFunc.type).isEqualTo("KtNamedFunction")
+                assertThat(secConstFunc.label).isEqualTo("signal")
+
+                val secConstFuncModifierList = secConstFunc.getFirstChild()
+
+                assertThat(secConstFuncModifierList.type).isEqualTo("KtDeclarationModifierList")
+                assertThat(secConstFuncModifierList.label).isEqualTo("")
+
+                assertThat(secConstFuncModifierList.getFirstChild().type).isEqualTo("ModifierEntry")
+                assertThat(secConstFuncModifierList.getFirstChild().label).isEqualTo("override")
+            }
+        }
+    }
 })
 
