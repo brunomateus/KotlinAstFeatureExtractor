@@ -46,7 +46,14 @@ class ASTExtractor : KtTreeVisitorVoid() {
 
 			//KtDeclaration
 			is KtEnumEntry -> element.name
-			is KtClass -> element.name
+			is KtClass -> {
+				if(element.isInterface()){
+					val modifiers = listOf(ASTNode(type="ModifierEntry", label="interface"))
+					val modifierList = ASTNode(type="KtDeclarationModifierList", label="", children=modifiers.toMutableList())
+					granChildren.add(modifierList)
+				}
+				element.name
+			}
 			is KtObjectDeclaration -> element.name
 			is KtAnonymousInitializer -> element.text //TODO
 			is KtNamedFunction -> element.name
@@ -111,6 +118,7 @@ class ASTExtractor : KtTreeVisitorVoid() {
 						granChildren.add(ASTNode(type="ModifierEntry", label=modifier))
 					}
 				}
+
 				""
 			}
 			is KtModifierList -> element.text
