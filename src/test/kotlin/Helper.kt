@@ -18,6 +18,7 @@ import java.io.File
 fun printAST(node: ASTNode) {
     val builder = StringBuilder(Klaxon().toJsonString(node))
     val content = (Parser().parse(builder) as JsonBase).toJsonString(true)
+    File("/tmp/teste.json").writeText(content)
     println(content)
 }
 
