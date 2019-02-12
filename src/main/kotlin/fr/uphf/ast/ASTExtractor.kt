@@ -69,7 +69,7 @@ class ASTExtractor : KtTreeVisitorVoid() {
 			is KtCallableReferenceExpression -> element.text
 			is KtClassLiteralExpression -> element.text //TODO
 			is KtParenthesizedExpression -> element.text
-			is KtStringTemplateExpression -> element.text //TODO
+			is KtStringTemplateExpression -> element.text
 			is KtConstantExpression -> element.text
 			is KtBlockExpression -> ""
 			is KtFunctionLiteral -> ""
@@ -82,7 +82,7 @@ class ASTExtractor : KtTreeVisitorVoid() {
 			is KtContinueExpression -> "continue"
 			is KtBreakExpression -> "break"
 			is KtCollectionLiteralExpression -> element.text //TODO
-			is KtSimpleNameExpression -> element.text //TODO
+			is KtSimpleNameExpression -> element.text
 			is KtLabeledExpression -> element.getLabelName()
 			is KtLabelReferenceExpression -> element.getReferencedName()
 			is KtAnnotatedExpression -> ""
