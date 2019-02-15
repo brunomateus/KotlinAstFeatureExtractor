@@ -1,5 +1,6 @@
 package fr.uphf.kastree.json.test
 
+import fr.uphf.analyze.DetectionResult
 import fr.uphf.feature.detector.DataClassDetector
 import io.gitlab.arturbosch.detekt.api.Finding
 import org.assertj.core.api.Assertions.*
@@ -31,11 +32,9 @@ data class Point(val x: Int, val y: Int)
 
             Then("it should report only one feature whose id is data_class") {
 
-                assertThat(findings).hasSize(1)
+                val result = DetectionResult.from(findings)
 
-                val finding = findings[0]
-
-                assertThat(finding.id).isEqualTo("data_class")
+                assertThat(result["data_class"]).hasSize(1)
 
             }
 
