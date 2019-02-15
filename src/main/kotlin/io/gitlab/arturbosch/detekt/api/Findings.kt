@@ -59,11 +59,11 @@ interface Compactable {
 
 open class Feature(
     override val id: String,
-    override val references: List<Entity>,
-    override val message: String,
     override val entity: Entity,
-    override val metrics: List<Metric>
-) : Finding() {
+    override val message: String = "",
+    override val references: List<Entity> = listOf(),
+    override val metrics: List<Metric> = listOf()
+    ) : Finding() {
 
     override fun compact(): String {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
