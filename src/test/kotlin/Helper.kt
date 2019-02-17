@@ -30,7 +30,10 @@ val proj by lazy {
 }
 
 fun getASTasJson(code: String): ASTNode {
-    val ktFile = PsiManager.getInstance(proj).findFile(LightVirtualFile("temp.kt", KotlinFileType.INSTANCE, code)) as KtFile
+    val ktFile = compileTo(code)
     val parser = ASTExtractor()
     return parser.getASTInJSON(ktFile)
 }
+
+fun compileTo(code: String) =
+    PsiManager.getInstance(proj).findFile(LightVirtualFile("temp.kt", KotlinFileType.INSTANCE, code)) as KtFile
