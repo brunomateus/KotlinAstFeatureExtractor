@@ -17,10 +17,12 @@ class DelegationDetector : FileAnalyzer() {
 		file.accept(object : KtTreeVisitorVoid() {
 
 			override fun visitDelegatedSuperTypeEntry(specifier: KtDelegatedSuperTypeEntry) {
+				super.visitDelegatedSuperTypeEntry(specifier)
 				findings.add(Feature(id = "super_delegation", entity = Entity.from(specifier)))
 			}
 
 			override fun visitPropertyDelegate(delegate: KtPropertyDelegate) {
+				super.visitPropertyDelegate(delegate)
 				findings.add(Feature(id = "property_delegation", entity = Entity.from(delegate)))
 			}
 

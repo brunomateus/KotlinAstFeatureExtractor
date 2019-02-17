@@ -12,6 +12,7 @@ class SafeOperartorDetector :  FileAnalyzer(){
 		file.accept(object : KtTreeVisitorVoid() {
 
 			override fun visitSafeQualifiedExpression(expression: KtSafeQualifiedExpression) {
+				super.visitSafeQualifiedExpression(expression)
 				findings.add(
 					Feature(id = "safe_call",
 						entity = Entity.from(expression))
@@ -19,6 +20,7 @@ class SafeOperartorDetector :  FileAnalyzer(){
 			}
 
 			override fun visitPostfixExpression(expression: KtPostfixExpression) {
+				super.visitPostfixExpression(expression)
 				if(expression.operationToken == KtTokens.EXCLEXCL) {
 					findings.add(
 						Feature(id = "unsafe_call",

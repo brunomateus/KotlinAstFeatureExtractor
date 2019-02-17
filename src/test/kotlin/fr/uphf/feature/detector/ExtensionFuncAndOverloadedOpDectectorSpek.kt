@@ -105,8 +105,8 @@ object ExtensionFuncAndOverloadedOpDectectorSpek : Spek({
                 assertThat(result.map { it.value.size }.sum()).isEqualTo(nFinding)
             }
 
-            And("two uses of super delegation"){
-                assertThat(result["extension_function" ]).hasSize(2)
+            And("two uses of extension function"){
+                assertThat(result["extension_function" ]).hasSize(3)
             }
 
 

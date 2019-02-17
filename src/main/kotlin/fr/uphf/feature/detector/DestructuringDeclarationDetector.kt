@@ -17,6 +17,7 @@ class DestructuringDeclarationDetector : FileAnalyzer() {
 		file.accept(object : KtTreeVisitorVoid() {
 
 			override fun visitDestructuringDeclaration(destructuringDeclaration: KtDestructuringDeclaration) {
+				super.visitDestructuringDeclaration(destructuringDeclaration)
 				findings.add(Feature(id = "destructuring_declaration",
 					entity = Entity.from(destructuringDeclaration)))
 			}

@@ -21,6 +21,7 @@ class ExtensionFunctionAndOverloadedOpDetector : FileAnalyzer() {
 		file.accept(object : KtTreeVisitorVoid() {
 
 			override fun visitNamedFunction(function: KtNamedFunction) {
+				super.visitNamedFunction(function)
 				if(function.hasModifier(KtTokens.OPERATOR_KEYWORD)){
 					findings.add(
 						Feature(id = "overloaded_op",

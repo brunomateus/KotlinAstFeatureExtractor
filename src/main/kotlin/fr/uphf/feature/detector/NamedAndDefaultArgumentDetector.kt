@@ -15,7 +15,7 @@ class NamedAndDefaultArgumentDetector : FileAnalyzer() {
 		file.accept(object : KtTreeVisitorVoid() {
 
 			override fun visitParameterList(ktlist: KtParameterList) {
-
+				super.visitParameterList(ktlist)
 				if (ktlist.parameters.any { it.hasDefaultValue() }) {
 					findings.add(Feature(id = "func_with_default_value",
 							entity = Entity.from(ktlist.parent))
