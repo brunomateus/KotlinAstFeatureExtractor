@@ -1,19 +1,7 @@
-package fr.uphf.kastree.json.test
+package fr.uphf.ast
 
-import com.beust.klaxon.JsonBase
-import com.beust.klaxon.Klaxon
-import com.beust.klaxon.Parser
-import fr.uphf.ast.ASTExtractor
-import fr.uphf.ast.ASTNode
+import fr.uphf.kastree.json.test.getASTasJson
 import org.assertj.core.api.Assertions.*
-import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
-import org.jetbrains.kotlin.com.intellij.psi.PsiManager
-import org.jetbrains.kotlin.com.intellij.testFramework.LightVirtualFile
-import org.jetbrains.kotlin.config.CompilerConfiguration
-import org.jetbrains.kotlin.idea.KotlinFileType
-import org.jetbrains.kotlin.psi.KtFile
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.gherkin.Feature
 
@@ -103,7 +91,7 @@ fun main(args: Array<String>) {
                 assertThat(binaryExpression.getFirstChild().label).isEqualTo("1")
 
                 assertThat(binaryExpression.getChild(1).type).isEqualTo("KtOperationReferenceExpression")
-                assertThat(binaryExpression.getChild(1).label).isEqualTo("..")
+                assertThat(binaryExpression.getChild(1).label).isEqualTo("")
 
                 assertThat(binaryExpression.getChild(2).type).isEqualTo("KtConstantExpression")
                 assertThat(binaryExpression.getChild(2).label).isEqualTo("3")

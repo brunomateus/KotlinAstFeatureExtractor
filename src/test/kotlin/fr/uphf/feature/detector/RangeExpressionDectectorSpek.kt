@@ -1,7 +1,8 @@
-package fr.uphf.kastree.json.test
+package fr.uphf.feature.detector
 
 import fr.uphf.analyze.DetectionResult
 import fr.uphf.feature.detector.*
+import fr.uphf.kastree.json.test.compileTo
 import io.gitlab.arturbosch.detekt.api.Finding
 import org.assertj.core.api.Assertions.*
 import org.jetbrains.kotlin.psi.KtFile
@@ -64,7 +65,6 @@ object RangeExpressionDectectorSpek : Spek({
                 val detector = RangeExpressionDetector()
                 val findings = detector.analyze(file)
                 result = DetectionResult.from(findings)
-                printAST(getASTasJson(code))
 
             }
 

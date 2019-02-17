@@ -1,6 +1,6 @@
-package fr.uphf.kastree.json.test
+package fr.uphf.ast
 
-import fr.uphf.ast.ASTNode
+import fr.uphf.kastree.json.test.getASTasJson
 import org.assertj.core.api.Assertions.*
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.gherkin.Feature

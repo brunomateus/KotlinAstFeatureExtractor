@@ -1,7 +1,8 @@
-package fr.uphf.kastree.json.test
+package fr.uphf.feature.detector
 
 import fr.uphf.analyze.DetectionResult
 import fr.uphf.feature.detector.DestructuringDeclarationDetector
+import fr.uphf.kastree.json.test.compileTo
 import io.gitlab.arturbosch.detekt.api.Finding
 import org.assertj.core.api.Assertions.*
 import org.jetbrains.kotlin.psi.KtFile
