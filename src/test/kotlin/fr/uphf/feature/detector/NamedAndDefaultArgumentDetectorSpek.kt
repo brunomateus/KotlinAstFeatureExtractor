@@ -1,11 +1,7 @@
 package fr.uphf.feature.detector
 
 import fr.uphf.analyze.DetectionResult
-import fr.uphf.feature.detector.DestructuringDeclarationDetector
-import fr.uphf.feature.detector.ExtensionFunctionAndOverloadedOpDetector
-import fr.uphf.feature.detector.LambdaDetector
-import fr.uphf.feature.detector.NamedAndDefaultArgumentDetector
-import fr.uphf.kastree.json.test.compileTo
+import fr.uphf.analyze.compileTo
 import io.gitlab.arturbosch.detekt.api.Finding
 import org.assertj.core.api.Assertions.*
 import org.jetbrains.kotlin.psi.KtFile
@@ -68,6 +64,7 @@ object NamedAndDefaultArgumentDetectorSpek : Spek({
 
             And("it should 2 named args"){
                 assertThat(result["named_arg" ]).hasSize(2)
+                println(DetectionResult.asJson(result))
             }
 
 

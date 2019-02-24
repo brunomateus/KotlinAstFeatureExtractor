@@ -1,4 +1,4 @@
-package fr.uphf.kastree.json.test
+package fr.uphf.analyze
 
 import com.beust.klaxon.JsonBase
 import com.beust.klaxon.Klaxon
@@ -13,7 +13,6 @@ import org.jetbrains.kotlin.com.intellij.testFramework.LightVirtualFile
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.idea.KotlinFileType
 import org.jetbrains.kotlin.psi.KtFile
-import java.io.File
 
 fun printAST(node: ASTNode) {
     val builder = StringBuilder(Klaxon().toJsonString(node))
@@ -29,11 +28,11 @@ val proj by lazy {
     ).project
 }
 
-fun getASTasJson(code: String): ASTNode {
-    val ktFile = compileTo(code)
+fun getASTasJson(code: String, filename: String = "temp.kt"): ASTNode {
+    val ktFile = compileTo(code, filename)
     val parser = ASTExtractor()
     return parser.getASTInJSON(ktFile)
 }
 
-fun compileTo(code: String) =
-    PsiManager.getInstance(proj).findFile(LightVirtualFile("temp.kt", KotlinFileType.INSTANCE, code)) as KtFile
+fun compileTo(code: String, filename: String="temp.kt") =
+    PsiManager.getInstance(proj).findFile(LightVirtualFile(filename, KotlinFileType.INSTANCE, code)) as KtFile
