@@ -1,3 +1,5 @@
+@file:JvmName("Helper")
+
 package fr.uphf.analyze
 
 import com.beust.klaxon.JsonBase
@@ -15,9 +17,17 @@ import org.jetbrains.kotlin.idea.KotlinFileType
 import org.jetbrains.kotlin.psi.KtFile
 
 fun printAST(node: ASTNode) {
-    val builder = StringBuilder(Klaxon().toJsonString(node))
-    val content = (Parser().parse(builder) as JsonBase).toJsonString(true)
+    val content = getASTasStringJson(node)
     println(content)
+}
+
+fun getASTasStringJson(code: String, filename: String): String {
+    return getASTasStringJson(getASTasJson(filename, code))
+}
+
+fun getASTasStringJson(node: ASTNode): String {
+    val builder = StringBuilder(Klaxon().toJsonString(node))
+    return (Parser().parse(builder) as JsonBase).toJsonString(true)
 }
 
 val proj by lazy {
