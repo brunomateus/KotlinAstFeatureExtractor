@@ -1,6 +1,7 @@
 package fr.uphf.ast
 
 import fr.uphf.analyze.getASTasJson
+import fr.uphf.analyze.getASTasStringJson
 import fr.uphf.analyze.printAST
 import org.assertj.core.api.Assertions.*
 import org.spekframework.spek2.Spek
@@ -192,6 +193,7 @@ fun read(b: Array<Byte>, off: Int = 0, len: Int = b.size) {
             }
             When("the AST is retrieved") {
                 rootNode = getASTasJson(code)
+                print(getASTasStringJson(rootNode))
             }
 
             Then("it should contain one function named main") {
@@ -230,15 +232,22 @@ fun read(b: Array<Byte>, off: Int = 0, len: Int = b.size) {
 
             And("Its first argument should  be the variable str"){
                 assertThat(parameterList.getFirstChild().type).isEqualTo("KtValueArgument")
-                assertThat(parameterList.getFirstChild().label).isEqualTo("str")
+                assertThat(parameterList.getFirstChild().label).isEqualTo("")
+
+                val nameRefExpr = parameterList.getFirstChild().getFirstChild()
+                assertThat(nameRefExpr.type).isEqualTo("KtNameReferenceExpression")
+                assertThat(nameRefExpr.label).isEqualTo("str")
             }
 
             And("Its second argument should be named as wordseparator and it should have a value '_'"){
                 assertThat(parameterList.getChild(1).type).isEqualTo("KtValueArgument")
-                assertThat(parameterList.getChild(1).label).isEqualTo("'_'")
+                assertThat(parameterList.getChild(1).label).isEqualTo("")
 
                 assertThat(parameterList.getChild(1).getFirstChild().type).isEqualTo("KtValueArgumentName")
                 assertThat(parameterList.getChild(1).getFirstChild().label).isEqualTo("wordSeparator")
+
+                assertThat(parameterList.getChild(1).getChild(1).type).isEqualTo("KtConstantExpression")
+                assertThat(parameterList.getChild(1).getChild(1).label).isEqualTo("'_'")
             }
 
         }

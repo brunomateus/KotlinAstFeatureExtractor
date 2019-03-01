@@ -1,6 +1,7 @@
 package fr.uphf.ast
 
 import fr.uphf.analyze.getASTasJson
+import fr.uphf.analyze.getASTasStringJson
 import org.assertj.core.api.Assertions.*
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.gherkin.Feature
@@ -26,6 +27,7 @@ annotation class Fancy
             }
             When("the AST is retrieved") {
                 rootNode = getASTasJson(code)
+                print(getASTasStringJson(rootNode))
             }
 
             val clsName = "Fancy"
@@ -47,8 +49,10 @@ annotation class Fancy
                 assertThat(modifier.label).isEqualTo("annotation")
             }
 
+
             val arguments = listOf("AnnotationTarget.CLASS", "AnnotationTarget.FUNCTION",
                 "AnnotationTarget.VALUE_PARAMETER", "AnnotationTarget.EXPRESSION")
+
             And("It should hav as target these elements: $arguments"){
                 val target = modifierList.getChild(1)
                 assertThat(target.type).isEqualTo("KtAnnotationEntry")
@@ -65,10 +69,22 @@ annotation class Fancy
 
                 assertThat(argumentList.children).hasSize(4)
 
+
                 for(i in 0..3){
                     val arg = argumentList.getChild(i)
                     assertThat(arg.type).isEqualTo("KtValueArgument")
-                    assertThat(arg.label).isEqualTo(arguments[i])
+                    assertThat(arg.label).isEqualTo("")
+
+                    val dotExpr = arg.getFirstChild()
+                    assertThat(dotExpr.type).isEqualTo("KtDotQualifiedExpression")
+                    assertThat(dotExpr.label).isEqualTo("")
+
+                    val expr = arguments[i].split(".")
+                    assertThat(dotExpr.getFirstChild().type).isEqualTo("KtNameReferenceExpression")
+                    assertThat(dotExpr.getFirstChild().label).isEqualTo(expr[0])
+
+                    assertThat(dotExpr.getChild(1).type).isEqualTo("KtNameReferenceExpression")
+                    assertThat(dotExpr.getChild(1).label).isEqualTo(expr[1])
                 }
             }
 
@@ -89,7 +105,17 @@ annotation class Fancy
                 assertThat(argumentList2.children).hasSize(1)
 
                 assertThat(argumentList2.getFirstChild().type).isEqualTo("KtValueArgument")
-                assertThat(argumentList2.getFirstChild().label).isEqualTo("AnnotationRetention.SOURCE")
+                assertThat(argumentList2.getFirstChild().label).isEqualTo("")
+
+                val dotExpr = argumentList2.getFirstChild().getFirstChild()
+                assertThat(dotExpr.type).isEqualTo("KtDotQualifiedExpression")
+                assertThat(dotExpr.label).isEqualTo("")
+
+                assertThat(dotExpr.getFirstChild().type).isEqualTo("KtNameReferenceExpression")
+                assertThat(dotExpr.getFirstChild().label).isEqualTo("AnnotationRetention")
+
+                assertThat(dotExpr.getChild(1).type).isEqualTo("KtNameReferenceExpression")
+                assertThat(dotExpr.getChild(1).label).isEqualTo("SOURCE")
             }
 
             And("it should have a @MustBeDocumented annontation without any argument"){

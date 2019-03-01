@@ -142,7 +142,8 @@ class ASTExtractor : KtTreeVisitorVoid() {
 			is KtTypeArgumentList -> element.text //TODO
 			is KtTypeReference -> element.text //TODO
 			is KtTypeElement -> element.text //TODO
-			is KtValueArgument -> if (element.getArgumentExpression() is KtLambdaExpression) "" else element.getArgumentExpression()?.text//named ?
+			//is KtValueArgument -> if (element.getArgumentExpression() is KtLambdaExpression) "" else element.getArgumentExpression()?.text//named ?
+			is KtValueArgument -> ""
 			is KtValueArgumentName -> element.asName.asString() //TODO Do not visit its child
 			is KtValueArgumentList -> ""
 			is KtWhenConditionWithExpression -> element.text

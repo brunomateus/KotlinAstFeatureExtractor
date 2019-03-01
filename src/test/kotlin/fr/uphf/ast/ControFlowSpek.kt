@@ -91,7 +91,7 @@ fun main(args: Array<String>) {
                 assertThat(binaryExpression.getFirstChild().label).isEqualTo("1")
 
                 assertThat(binaryExpression.getChild(1).type).isEqualTo("KtOperationReferenceExpression")
-                assertThat(binaryExpression.getChild(1).label).isEqualTo("")
+                assertThat(binaryExpression.getChild(1).label).isEqualTo("..")
 
                 assertThat(binaryExpression.getChild(2).type).isEqualTo("KtConstantExpression")
                 assertThat(binaryExpression.getChild(2).label).isEqualTo("3")
