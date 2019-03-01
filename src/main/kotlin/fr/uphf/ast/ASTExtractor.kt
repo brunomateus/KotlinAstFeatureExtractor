@@ -22,6 +22,8 @@ class ASTExtractor : KtTreeVisitorVoid() {
 	override fun visitKtElement(element: KtElement) {
 
 		val granChildren = emptyList<ASTNode>().toMutableList()
+		var skipChildren = false
+
 		val label = when(element) {
 			is KtConstructorDelegationReferenceExpression -> element.text
 			is KtConstructorDelegationCall -> ""
@@ -96,10 +98,16 @@ class ASTExtractor : KtTreeVisitorVoid() {
 			is KtCallExpression -> element.calleeExpression?.text
 			is KtArrayAccessExpression -> ""
 			// KtExpression
-			is KtImportDirective -> element.importedReference?.text
+			is KtImportDirective -> {
+				skipChildren = true
+				element.importedReference?.text + if(element.isAllUnder) ".*" else ""
+			}
 			is KtPrimaryConstructor -> ""
 			is KtPropertyAccessor -> if (element.isGetter) "get" else if (element.isSetter) "set" else ""
-			is KtPackageDirective -> element.packageNameExpression?.text
+			is KtPackageDirective -> {
+				skipChildren = true
+				element.packageNameExpression?.text
+			}
 			is KtModifierListOwner -> element.text //TODO: Should come after PrimaryContructor and PropertyAccessor
 			is KtDeclarationModifierList -> {
 				var modifiersList = element.text
@@ -142,6 +150,9 @@ class ASTExtractor : KtTreeVisitorVoid() {
 			is KtWhenConditionIsPattern -> element.text
 			is KtWhenEntry -> if (element.isElse) "else" else ""
 
+			is KtOperationExpression -> element.text
+			is KtNameReferenceExpression -> element.text
+
 			else -> ""
 		}
 
@@ -149,7 +160,7 @@ class ASTExtractor : KtTreeVisitorVoid() {
 		currentAstNode.addChild(childNode)
 		val previousAstNode = currentAstNode
 		currentAstNode = childNode
-		super.visitKtElement(element)
+		if(!skipChildren) super.visitKtElement(element)
 		currentAstNode = previousAstNode
 	}
 

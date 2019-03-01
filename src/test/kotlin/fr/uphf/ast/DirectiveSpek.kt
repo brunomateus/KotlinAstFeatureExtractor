@@ -1,6 +1,7 @@
 package fr.uphf.ast
 
 import fr.uphf.analyze.getASTasJson
+import fr.uphf.analyze.getASTasStringJson
 import org.assertj.core.api.Assertions.*
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.gherkin.Feature
@@ -65,7 +66,7 @@ package fr.uphf
 
 import com.beust.klaxon.JsonBase
 import com.beust.klaxon.Klaxon
-import com.beust.klaxon.Parser
+import com.beust.klaxon.*
 import kotlin.test.assertNotNull
 
 typealias NodeSet = Set<Network.Node>
@@ -74,6 +75,7 @@ typealias MyHandler = (Int, String, Any) -> Unit
             }
             When("the AST is retrieved") {
                 rootNode = getASTasJson(code)
+                println(getASTasStringJson(rootNode))
             }
 
             Then("It should contain a package definiton for the package fr.uphf"){
@@ -83,7 +85,7 @@ typealias MyHandler = (Int, String, Any) -> Unit
 
             val imports = listOf("com.beust.klaxon.JsonBase",
                 "com.beust.klaxon.Klaxon",
-                "com.beust.klaxon.Parser",
+                "com.beust.klaxon.*",
                 "kotlin.test.assertNotNull")
             And("It should contain a list imports $imports"){
                 val importList = rootNode.getChild(1)
