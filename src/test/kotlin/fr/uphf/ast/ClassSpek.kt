@@ -276,10 +276,10 @@ class Derived(p: Int) : Base(p)
 
                val consCallExpr = superTypeEntry.getFirstChild()
                assertThat(consCallExpr.type).isEqualTo("KtConstructorCalleeExpression")
-               assertThat(consCallExpr.label).isEqualTo("")
+               assertThat(consCallExpr.label).isEqualTo("Base")
 
-               assertThat(consCallExpr.getFirstChild().type).isEqualTo("KtTypeReference")
-               assertThat(consCallExpr.getFirstChild().label).isEqualTo("Base")
+//               assertThat(consCallExpr.getFirstChild().type).isEqualTo("KtTypeReference")
+//               assertThat(consCallExpr.getFirstChild().label).isEqualTo("Base")
            }
         }
 
@@ -399,10 +399,10 @@ class Derived(
 
                 val consCallExpr = superTypeEntry.getFirstChild()
                 assertThat(consCallExpr.type).isEqualTo("KtConstructorCalleeExpression")
-                assertThat(consCallExpr.label).isEqualTo("")
+                assertThat(consCallExpr.label).isEqualTo("Base")
 
-                assertThat(consCallExpr.getFirstChild().type).isEqualTo("KtTypeReference")
-                assertThat(consCallExpr.getFirstChild().label).isEqualTo("Base")
+//                assertThat(consCallExpr.getFirstChild().type).isEqualTo("KtTypeReference")
+//                assertThat(consCallExpr.getFirstChild().label).isEqualTo("Base")
             }
 
             And("The $cls2Name should override the property defined in $cls1Name"){
@@ -496,10 +496,10 @@ class MathsTeacher : Teacher() {
 
                 val consCallExpr = superTypeEntry.getFirstChild()
                 assertThat(consCallExpr.type).isEqualTo("KtConstructorCalleeExpression")
-                assertThat(consCallExpr.label).isEqualTo("")
+                assertThat(consCallExpr.label).isEqualTo("Teacher")
 
-                assertThat(consCallExpr.getFirstChild().type).isEqualTo("KtTypeReference")
-                assertThat(consCallExpr.getFirstChild().label).isEqualTo("Teacher")
+//                assertThat(consCallExpr.getFirstChild().type).isEqualTo("KtTypeReference")
+//                assertThat(consCallExpr.getFirstChild().label).isEqualTo("Teacher")
             }
 
             And("The $cls2Name should override the method defined in $cls1Name"){
@@ -597,10 +597,10 @@ abstract class Derived : Base() {
 
                 val consCallExpr = superTypeEntry.getFirstChild()
                 assertThat(consCallExpr.type).isEqualTo("KtConstructorCalleeExpression")
-                assertThat(consCallExpr.label).isEqualTo("")
+                assertThat(consCallExpr.label).isEqualTo(cls1Name)
 
-                assertThat(consCallExpr.getFirstChild().type).isEqualTo("KtTypeReference")
-                assertThat(consCallExpr.getFirstChild().label).isEqualTo(cls1Name)
+//                assertThat(consCallExpr.getFirstChild().type).isEqualTo("KtTypeReference")
+//                assertThat(consCallExpr.getFirstChild().label).isEqualTo(cls1Name)
             }
 
             And("The $cls2Name should override the method defined in $cls1Name making it abstract"){
@@ -713,10 +713,10 @@ class Bar : Foo() {
 
                 val consCallExpr = superTypeEntry.getFirstChild()
                 assertThat(consCallExpr.type).isEqualTo("KtConstructorCalleeExpression")
-                assertThat(consCallExpr.label).isEqualTo("")
+                assertThat(consCallExpr.label).isEqualTo(cls1Name)
 
-                assertThat(consCallExpr.getFirstChild().type).isEqualTo("KtTypeReference")
-                assertThat(consCallExpr.getFirstChild().label).isEqualTo(cls1Name)
+//                assertThat(consCallExpr.getFirstChild().type).isEqualTo("KtTypeReference")
+//                assertThat(consCallExpr.getFirstChild().label).isEqualTo(cls1Name)
             }
 
             lateinit var class2Body: ASTNode

@@ -15,4 +15,16 @@ data class ASTNode(val type: String, val label: String, val children: MutableLis
 
 	fun getFirstChild(): ASTNode = children.first()
 
+	fun isLeaf() = children.isEmpty()
+
+	fun leafNode(): Set<String> {
+		var leafs = emptySet<String>()
+		if (isLeaf()) {
+			leafs = leafs.plus(type)
+		} else {
+			children.forEach { leafs = leafs.union(it.leafNode()) }
+		}
+		return leafs
+	}
+
 }

@@ -2,6 +2,7 @@ package fr.uphf.ast
 
 import fr.uphf.analyze.getASTasJson
 import fr.uphf.analyze.getASTasStringJson
+import fr.uphf.analyze.printAST
 import org.assertj.core.api.Assertions.*
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.gherkin.Feature
@@ -27,7 +28,6 @@ annotation class Fancy
             }
             When("the AST is retrieved") {
                 rootNode = getASTasJson(code)
-                print(getASTasStringJson(rootNode))
             }
 
             val clsName = "Fancy"
@@ -56,12 +56,12 @@ annotation class Fancy
             And("It should hav as target these elements: $arguments"){
                 val target = modifierList.getChild(1)
                 assertThat(target.type).isEqualTo("KtAnnotationEntry")
-                assertThat(target.label).isEqualTo("@Target")
+                assertThat(target.label).isEqualTo("")
 
                 assertThat(target.children).hasSize(2)
 
                 assertThat(target.getFirstChild().type).isEqualTo("KtConstructorCalleeExpression")
-                assertThat(target.getFirstChild().label).isEqualTo("")
+                assertThat(target.getFirstChild().label).isEqualTo("Target")
 
                 val argumentList = target.getChild(1)
                 assertThat(argumentList.type).isEqualTo("KtValueArgumentList")
@@ -91,12 +91,12 @@ annotation class Fancy
             And("it should have a @Retention annontation with AnnotationRetention.SOURCE as argument"){
                 val retention = modifierList.getChild(2)
                 assertThat(retention.type).isEqualTo("KtAnnotationEntry")
-                assertThat(retention.label).isEqualTo("@Retention")
+                assertThat(retention.label).isEqualTo("")
 
                 assertThat(retention.children).hasSize(2)
 
                 assertThat(retention.getFirstChild().type).isEqualTo("KtConstructorCalleeExpression")
-                assertThat(retention.getFirstChild().label).isEqualTo("")
+                assertThat(retention.getFirstChild().label).isEqualTo("Retention")
 
                 val argumentList2 = retention.getChild(1)
                 assertThat(argumentList2.type).isEqualTo("KtValueArgumentList")
@@ -121,12 +121,12 @@ annotation class Fancy
             And("it should have a @MustBeDocumented annontation without any argument"){
                 val documented = modifierList.getChild(3)
                 assertThat(documented.type).isEqualTo("KtAnnotationEntry")
-                assertThat(documented.label).isEqualTo("@MustBeDocumented")
+                assertThat(documented.label).isEqualTo("")
 
                 assertThat(documented.children).hasSize(1)
 
                 assertThat(documented.getFirstChild().type).isEqualTo("KtConstructorCalleeExpression")
-                assertThat(documented.getFirstChild().label).isEqualTo("")
+                assertThat(documented.getFirstChild().label).isEqualTo("MustBeDocumented")
             }
 
         }
@@ -153,10 +153,13 @@ annotation class Fancy
 
                 val fileAnnotation = annotationList.getFirstChild()
                 assertThat(fileAnnotation.type).isEqualTo("KtAnnotationEntry")
-                assertThat(fileAnnotation.label).isEqualTo("@file:JvmName")
+                assertThat(fileAnnotation.label).isEqualTo("")
 
                 assertThat(fileAnnotation.getFirstChild().type).isEqualTo("KtAnnotationUseSiteTarget")
                 assertThat(fileAnnotation.getFirstChild().label).isEqualTo("file")
+
+                assertThat(fileAnnotation.getChild(1).type).isEqualTo("KtConstructorCalleeExpression")
+                assertThat(fileAnnotation.getChild(1).label).isEqualTo("JvmName")
             }
 
             val clsName = "Example"
@@ -185,10 +188,13 @@ annotation class Fancy
                 val modifierList = p1.getFirstChild()
                 val modifier = modifierList.getFirstChild()
                 assertThat(modifier.type).isEqualTo("KtAnnotationEntry")
-                assertThat(modifier.label).isEqualTo("@field:Ann")
+                assertThat(modifier.label).isEqualTo("")
 
                 assertThat(modifier.getFirstChild().type).isEqualTo("KtAnnotationUseSiteTarget")
                 assertThat(modifier.getFirstChild().label).isEqualTo("field")
+
+                assertThat(modifier.getChild(1).type).isEqualTo("KtConstructorCalleeExpression")
+                assertThat(modifier.getChild(1).label).isEqualTo("Ann")
             }
 
             And("The first parameter name bar should be read-only and annotated with @get:Ann"){
@@ -199,10 +205,13 @@ annotation class Fancy
                 val modifierList = p2.getFirstChild()
                 val modifier = modifierList.getFirstChild()
                 assertThat(modifier.type).isEqualTo("KtAnnotationEntry")
-                assertThat(modifier.label).isEqualTo("@get:Ann")
+                assertThat(modifier.label).isEqualTo("")
 
                 assertThat(modifier.getFirstChild().type).isEqualTo("KtAnnotationUseSiteTarget")
                 assertThat(modifier.getFirstChild().label).isEqualTo("get")
+
+                assertThat(modifier.getChild(1).type).isEqualTo("KtConstructorCalleeExpression")
+                assertThat(modifier.getChild(1).label).isEqualTo("Ann")
             }
 
             And("The first parameter name quux should be read-only and annotated with @param:Ann"){
@@ -213,10 +222,13 @@ annotation class Fancy
                 val modifierList = p3.getFirstChild()
                 val modifier = modifierList.getFirstChild()
                 assertThat(modifier.type).isEqualTo("KtAnnotationEntry")
-                assertThat(modifier.label).isEqualTo("@param:Ann")
+                assertThat(modifier.label).isEqualTo("")
 
                 assertThat(modifier.getFirstChild().type).isEqualTo("KtAnnotationUseSiteTarget")
                 assertThat(modifier.getFirstChild().label).isEqualTo("param")
+
+                assertThat(modifier.getChild(1).type).isEqualTo("KtConstructorCalleeExpression")
+                assertThat(modifier.getChild(1).label).isEqualTo("Ann")
             }
 
 
@@ -236,6 +248,7 @@ annotation class Fancy
             }
             When("the AST is retrieved") {
                 rootNode = getASTasJson(code)
+                printAST(rootNode)
             }
 
 
@@ -269,7 +282,7 @@ annotation class Fancy
 
                 val annotation = modifierList.getFirstChild()
                 assertThat(annotation.type).isEqualTo("KtAnnotation")
-                assertThat(annotation.label).isEqualTo("@set:[Inject VisibleForTesting]")
+                assertThat(annotation.label).isEqualTo("")
 
                 assertThat(annotation.children).hasSize(3)
 
@@ -277,10 +290,19 @@ annotation class Fancy
                 assertThat(annotation.getFirstChild().label).isEqualTo("set")
 
                 assertThat(annotation.getChild(1).type).isEqualTo("KtAnnotationEntry")
-                assertThat(annotation.getChild(1).label).isEqualTo("@set:Inject")
+                assertThat(annotation.getChild(1).label).isEqualTo("")
+
+                assertThat(annotation.getChild(1).getFirstChild().type).isEqualTo("KtConstructorCalleeExpression")
+                assertThat(annotation.getChild(1).getFirstChild().label).isEqualTo("Inject")
 
                 assertThat(annotation.getChild(2).type).isEqualTo("KtAnnotationEntry")
-                assertThat(annotation.getChild(2).label).isEqualTo("@set:VisibleForTesting")
+                assertThat(annotation.getChild(2).label).isEqualTo("")
+
+                assertThat(annotation.getChild(2).getFirstChild().type).isEqualTo("KtConstructorCalleeExpression")
+                assertThat(annotation.getChild(2).getFirstChild().label).isEqualTo("VisibleForTesting")
+
+
+
             }
 
         }
@@ -320,7 +342,10 @@ annotation class Fancy
                 assertThat(modifierList.getFirstChild().label).isEqualTo("public")
 
                 assertThat(modifierList.getChild(1).type).isEqualTo("KtAnnotationEntry")
-                assertThat(modifierList.getChild(1).label).isEqualTo("@Fancy")
+                assertThat(modifierList.getChild(1).label).isEqualTo("")
+
+                assertThat(modifierList.getChild(1).getFirstChild().type).isEqualTo("KtConstructorCalleeExpression")
+                assertThat(modifierList.getChild(1).getFirstChild().label).isEqualTo("Fancy")
             }
 
             lateinit var func: ASTNode
@@ -342,7 +367,10 @@ annotation class Fancy
                 assertThat(modifierList.children).hasSize(1)
 
                 assertThat(modifierList.getFirstChild().type).isEqualTo("KtAnnotationEntry")
-                assertThat(modifierList.getFirstChild().label).isEqualTo("@Fancy")
+                assertThat(modifierList.getFirstChild().label).isEqualTo("")
+
+                assertThat(modifierList.getFirstChild().getFirstChild().type).isEqualTo("KtConstructorCalleeExpression")
+                assertThat(modifierList.getFirstChild().getFirstChild().label).isEqualTo("Fancy")
 
                 parameterList = func.getChild(1)
                 assertThat(parameterList.children).hasSize(1)
@@ -364,7 +392,10 @@ annotation class Fancy
                 assertThat(modifierList.children).hasSize(1)
 
                 assertThat(modifierList.getFirstChild().type).isEqualTo("KtAnnotationEntry")
-                assertThat(modifierList.getFirstChild().label).isEqualTo("@Fancy")
+                assertThat(modifierList.getFirstChild().label).isEqualTo("")
+
+                assertThat(modifierList.getFirstChild().getFirstChild().type).isEqualTo("KtConstructorCalleeExpression")
+                assertThat(modifierList.getFirstChild().getFirstChild().label).isEqualTo("Fancy")
             }
 
             And("it should return an expression annotated with @Fancy"){
@@ -381,7 +412,10 @@ annotation class Fancy
                 assertThat(parenExp.getFirstChild().label).isEqualTo("")
 
                 assertThat(parenExp.getFirstChild().getFirstChild().type).isEqualTo("KtAnnotationEntry")
-                assertThat(parenExp.getFirstChild().getFirstChild().label).isEqualTo("@Fancy")
+                assertThat(parenExp.getFirstChild().getFirstChild().label).isEqualTo("")
+
+                assertThat(parenExp.getFirstChild().getFirstChild().getFirstChild().type).isEqualTo("KtConstructorCalleeExpression")
+                assertThat(parenExp.getFirstChild().getFirstChild().getFirstChild().label).isEqualTo("Fancy")
             }
 
         }

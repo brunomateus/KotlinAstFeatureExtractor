@@ -40,9 +40,13 @@ class ASTExtractor : KtTreeVisitorVoid() {
 			is KtPostfixExpression -> ""
 			is KtPrefixExpression -> ""
 
-			is KtAnnotationEntry -> "@${if (element.useSiteTarget != null) element.useSiteTarget?.text + ":" else ""}${element.typeReference?.text}"
+			is KtAnnotationEntry -> ""
+			is KtConstructorCalleeExpression -> {
+				skipChildren = true
+				element.text
+			}
 			is KtAnnotationUseSiteTarget -> element.text
-			is KtAnnotation -> element.text
+			is KtAnnotation -> ""
 			is KtParameter -> if (element.valOrVarKeyword != null) "${element.valOrVarKeyword?.text} ${element.name}" else element.name
 			is KtLambdaArgument -> ""
 
