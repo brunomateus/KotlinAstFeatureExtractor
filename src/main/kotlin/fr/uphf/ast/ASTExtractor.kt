@@ -76,7 +76,7 @@ class ASTExtractor : KtTreeVisitorVoid() {
 			is KtUnaryExpression -> element.text //TODO
 			is KtIsExpression -> ""
 			is KtCallableReferenceExpression -> element.text
-			is KtClassLiteralExpression -> element.text //TODO
+			is KtClassLiteralExpression -> ""
 			is KtParenthesizedExpression -> element.text
 			is KtStringTemplateExpression -> element.text
 			is KtConstantExpression -> element.text
