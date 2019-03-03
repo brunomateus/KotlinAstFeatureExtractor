@@ -790,6 +790,7 @@ class Example {
             }
             When("the AST is retrieved") {
                 rootNode = getASTasJson(code)
+                printAST(rootNode)
             }
 
             val clsName = "Example"
@@ -820,8 +821,18 @@ class Example {
                 assertThat(delegation.type).isEqualTo("KtPropertyDelegate")
                 assertThat(delegation.label).isEqualTo("")
 
-                assertThat(delegation.getFirstChild().type).isEqualTo("KtCallExpression")
-                assertThat(delegation.getFirstChild().label).isEqualTo("Delegate")
+                val callExpr = delegation.getFirstChild()
+                assertThat(callExpr.type).isEqualTo("KtCallExpression")
+                assertThat(callExpr.label).isEqualTo("")
+
+                assertThat(callExpr.getFirstChild().type).isEqualTo("KtNameReferenceExpression")
+                assertThat(callExpr.getFirstChild().label).isEqualTo("Delegate")
+
+                val argumentList = callExpr.getChild(1)
+                assertThat(argumentList.type).isEqualTo("KtValueArgumentList")
+                assertThat(argumentList.label).isEqualTo("")
+
+                assertThat(argumentList.children).hasSize(0)
 
             }
         }

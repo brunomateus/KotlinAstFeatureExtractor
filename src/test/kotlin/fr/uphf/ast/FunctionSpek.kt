@@ -206,24 +206,28 @@ fun read(b: Array<Byte>, off: Int = 0, len: Int = b.size) {
                 assertThat(namedFunctionNode.children).hasSize(2)
             }
 
-            lateinit var funcCall: ASTNode
+            lateinit var callExpr: ASTNode
             And("the first should be a function call") {
                 val funcBody = namedFunctionNode.getChild(1)
                 assertThat(funcBody.type).isEqualTo("KtBlockExpression")
                 assertThat(funcBody.label).isEqualTo("")
 
-                funcCall = funcBody.getFirstChild()
-                assertThat(funcCall.type).isEqualTo("KtCallExpression")
-                assertThat(funcCall.label).isEqualTo("reformat")
+                callExpr = funcBody.getFirstChild()
+                assertThat(callExpr.type).isEqualTo("KtCallExpression")
+                assertThat(callExpr.label).isEqualTo("")
+
+                assertThat(callExpr.getFirstChild().type).isEqualTo("KtNameReferenceExpression")
+                assertThat(callExpr.getFirstChild().label).isEqualTo("reformat")
+
             }
 
             And("the function call should have two children"){
-                assertThat(funcCall.children).hasSize(2)
+                assertThat(callExpr.children).hasSize(2)
             }
 
             lateinit var parameterList: ASTNode
             And("th first children should be a KtValueArgumentList with size 2"){
-                parameterList = funcCall.getChild(1)
+                parameterList = callExpr.getChild(1)
                 assertThat(parameterList.type).isEqualTo("KtValueArgumentList")
                 assertThat(parameterList.label).isEqualTo("")
                 assertThat(parameterList.children).hasSize(2)

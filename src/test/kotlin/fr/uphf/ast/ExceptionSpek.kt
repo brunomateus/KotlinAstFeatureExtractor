@@ -1,6 +1,7 @@
 package fr.uphf.ast
 
 import fr.uphf.analyze.getASTasJson
+import fr.uphf.analyze.printAST
 import org.assertj.core.api.Assertions.*
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.gherkin.Feature
@@ -89,6 +90,7 @@ fun fail(message: String): Nothing {
             }
             When("the AST is retrieved") {
                 rootNode = getASTasJson(code)
+                printAST(rootNode)
             }
 
             Then("it should contain one function named fail") {
@@ -111,8 +113,26 @@ fun fail(message: String): Nothing {
                 assertThat(throwExpr.type).isEqualTo("KtThrowExpression")
                 assertThat(throwExpr.label).isEqualTo("throw")
 
-                assertThat(throwExpr.getFirstChild().type).isEqualTo("KtCallExpression")
-                assertThat(throwExpr.getFirstChild().label).isEqualTo("IllegalArgumentException")
+                val callExpr = throwExpr.getFirstChild()
+                assertThat(callExpr.type).isEqualTo("KtCallExpression")
+                assertThat(callExpr.label).isEqualTo("")
+
+                assertThat(callExpr.getFirstChild().type).isEqualTo("KtNameReferenceExpression")
+                assertThat(callExpr.getFirstChild().label).isEqualTo("IllegalArgumentException")
+
+                val argumentList = callExpr.getChild(1)
+                assertThat(argumentList.type).isEqualTo("KtValueArgumentList")
+                assertThat(argumentList.label).isEqualTo("")
+
+                assertThat(argumentList.children).hasSize(1)
+
+                val argument = argumentList.getFirstChild()
+                assertThat(argument.type).isEqualTo("KtValueArgument")
+                assertThat(argument.label).isEqualTo("")
+
+                assertThat(argument.getFirstChild().type).isEqualTo("KtNameReferenceExpression")
+                assertThat(argument.getFirstChild().label).isEqualTo("message")
+
             }
 
         }
