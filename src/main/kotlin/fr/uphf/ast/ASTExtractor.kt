@@ -137,6 +137,7 @@ class ASTExtractor : KtTreeVisitorVoid() {
 
 			is KtSuperTypeCallEntry -> ""
 			is KtDestructuringDeclarationEntry -> element.text
+			is KtLiteralStringTemplateEntry -> element.text
 			is KtStringTemplateEntry -> ""
 			is KtBlockStringTemplateEntry -> ""
 			is KtSuperExpression -> "super"

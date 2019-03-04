@@ -1,36 +1,16 @@
-package mobi.porquenao.poc.kotlin.ui
+package demo
 
-import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.view.Menu
-import android.view.MenuItem
-import kotlinx.android.synthetic.main.activity_main.*
-import mobi.porquenao.poc.kotlin.R
+import java.util.*
 
-class MainActivity : BaseActivity() {
-    lateinit var listAdapter: MainAdapter
+class KotlinGreetingJoiner(val greeter: Greeter) {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+    val names = ArrayList<String?>()
 
-        with (list) {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(this@MainActivity)
-            listAdapter = MainAdapter()
-            adapter = listAdapter
-        }
+    fun addName(name: String?) {
+        names.add(name)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main, menu)
-        return super.onCreateOptionsMenu(menu)
+    fun getJoinedGreeting(): String {
+        return "${greeter.getGreeting()} ${names.filterNotNull().joinToString(separator = " and ")}"
     }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        listAdapter.add()
-        list.smoothScrollToPosition(0)
-        return true
-    }
-
 }
