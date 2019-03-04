@@ -162,8 +162,12 @@ fun main(args: Array<String>) {
                 assertThat(condition.getChild(1).type).isEqualTo("KtOperationReferenceExpression")
                 assertThat(condition.getChild(1).label).isEqualTo("is")
 
-                assertThat(condition.getChild(2).type).isEqualTo("KtTypeReference")
-                assertThat(condition.getChild(2).label).isEqualTo("Int")
+                val typeReference = condition.getChild(2)
+                assertThat(typeReference.type).isEqualTo("KtTypeReference")
+                assertThat(typeReference.label).isEqualTo("")
+
+                assertThat(typeReference.getFirstChild().getFirstChild().type).isEqualTo("KtNameReferenceExpression")
+                assertThat(typeReference.getFirstChild().getFirstChild().label).isEqualTo("Int")
             }
 
         }

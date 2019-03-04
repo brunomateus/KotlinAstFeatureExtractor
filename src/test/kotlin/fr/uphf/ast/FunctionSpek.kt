@@ -110,6 +110,7 @@ fun read(b: Array<Byte>, off: Int = 0, len: Int = b.size) {
             }
             When("the AST is retrieved") {
                 rootNode = getASTasJson(code)
+                printAST(rootNode)
             }
 
             Then("it should contain one function named main") {
@@ -136,8 +137,36 @@ fun read(b: Array<Byte>, off: Int = 0, len: Int = b.size) {
                 assertThat(p1.type).isEqualTo("KtParameter")
                 assertThat(p1.label).isEqualTo("b")
 
-                assertThat(p1.getFirstChild().type).isEqualTo("KtTypeReference")
-                assertThat(p1.getFirstChild().label).isEqualTo("Array<Byte>")
+                val typeReference = p1.getFirstChild()
+                assertThat(typeReference.type).isEqualTo("KtTypeReference")
+                assertThat(typeReference.label).isEqualTo("")
+
+                assertThat(typeReference.getFirstChild().getFirstChild().type).isEqualTo("KtNameReferenceExpression")
+                assertThat(typeReference.getFirstChild().getFirstChild().label).isEqualTo("Array")
+
+                val argumentList = typeReference.getFirstChild().getChild(1)
+                assertThat(argumentList.type).isEqualTo("KtTypeArgumentList")
+                assertThat(argumentList.label).isEqualTo("")
+
+                val typeProjection = argumentList.getFirstChild()
+                assertThat(typeProjection.type).isEqualTo("KtTypeProjection")
+                assertThat(typeProjection.label).isEqualTo("")
+
+                assertThat(typeProjection.getFirstChild().type).isEqualTo("KtTypeReference")
+                assertThat(typeProjection.getFirstChild().label).isEqualTo("")
+
+                val userType = typeProjection.getFirstChild().getFirstChild()
+                assertThat(userType.type).isEqualTo("KtUserType")
+                assertThat(userType.label).isEqualTo("")
+
+                assertThat(userType.getFirstChild().type).isEqualTo("KtNameReferenceExpression")
+                assertThat(userType.getFirstChild().label).isEqualTo("Byte")
+
+
+
+
+
+
             }
 
             And("the second parameter is named off, it is an Int and it has default value 0"){
@@ -148,8 +177,16 @@ fun read(b: Array<Byte>, off: Int = 0, len: Int = b.size) {
                 assertThat(p2.children)
                     .hasSize(2)
 
-                assertThat(p2.getFirstChild().type).isEqualTo("KtTypeReference")
-                assertThat(p2.getFirstChild().label).isEqualTo("Int")
+                val typeReference = p2.getFirstChild()
+                assertThat(typeReference.type).isEqualTo("KtTypeReference")
+                assertThat(typeReference.label).isEqualTo("")
+
+                val userType = typeReference.getFirstChild()
+                assertThat(userType.type).isEqualTo("KtUserType")
+                assertThat(userType.label).isEqualTo("")
+
+                assertThat(userType.getFirstChild().type).isEqualTo("KtNameReferenceExpression")
+                assertThat(userType.getFirstChild().label).isEqualTo("Int")
 
                 assertThat(p2.getChild(1).type).isEqualTo("KtConstantExpression")
                 assertThat(p2.getChild(1).label).isEqualTo("0")
@@ -162,8 +199,16 @@ fun read(b: Array<Byte>, off: Int = 0, len: Int = b.size) {
 
                 assertThat(p3.children).hasSize(2)
 
-                assertThat(p3.getFirstChild().type).isEqualTo("KtTypeReference")
-                assertThat(p3.getFirstChild().label).isEqualTo("Int")
+                val typeReference = p3.getFirstChild()
+                assertThat(typeReference.type).isEqualTo("KtTypeReference")
+                assertThat(typeReference.label).isEqualTo("")
+
+                val userType = typeReference.getFirstChild()
+                assertThat(userType.type).isEqualTo("KtUserType")
+                assertThat(userType.label).isEqualTo("")
+
+                assertThat(userType.getFirstChild().type).isEqualTo("KtNameReferenceExpression")
+                assertThat(userType.getFirstChild().label).isEqualTo("Int")
 
                 assertThat(p3.getChild(1).type).isEqualTo("KtDotQualifiedExpression")
                 assertThat(p3.getChild(1).label).isEqualTo("")
@@ -323,9 +368,30 @@ fun read(b: Array<Byte>, off: Int = 0, len: Int = b.size) {
             }
 
             And("The third children of the named function should be the return type, List<T>"){
-                val returnType = namedFunctionNode.getChild(2)
-                assertThat(returnType.type).isEqualTo("KtTypeReference")
-                assertThat(returnType.label).isEqualTo("List<T>")
+                val typeReference = namedFunctionNode.getChild(2)
+                assertThat(typeReference.type).isEqualTo("KtTypeReference")
+                assertThat(typeReference.label).isEqualTo("")
+
+                assertThat(typeReference.getFirstChild().getFirstChild().type).isEqualTo("KtNameReferenceExpression")
+                assertThat(typeReference.getFirstChild().getFirstChild().label).isEqualTo("List")
+
+                val argumentList = typeReference.getFirstChild().getChild(1)
+                assertThat(argumentList.type).isEqualTo("KtTypeArgumentList")
+                assertThat(argumentList.label).isEqualTo("")
+
+                val typeProjection = argumentList.getFirstChild()
+                assertThat(typeProjection.type).isEqualTo("KtTypeProjection")
+                assertThat(typeProjection.label).isEqualTo("")
+
+                assertThat(typeProjection.getFirstChild().type).isEqualTo("KtTypeReference")
+                assertThat(typeProjection.getFirstChild().label).isEqualTo("")
+
+                val userType = typeProjection.getFirstChild().getFirstChild()
+                assertThat(userType.type).isEqualTo("KtUserType")
+                assertThat(userType.label).isEqualTo("")
+
+                assertThat(userType.getFirstChild().type).isEqualTo("KtNameReferenceExpression")
+                assertThat(userType.getFirstChild().label).isEqualTo("T")
             }
 
         }
@@ -380,7 +446,28 @@ fun read(b: Array<Byte>, off: Int = 0, len: Int = b.size) {
             And("the second child should be A KtReceiverType, MutableList<T>"){
                 val receiverType = namedFunctionNode.getChild(1)
                 assertThat(receiverType.type).isEqualTo("KtTypeReference")
-                assertThat(receiverType.label).isEqualTo("MutableList<T>")
+                assertThat(receiverType.label).isEqualTo("")
+
+                assertThat(receiverType.getFirstChild().getFirstChild().type).isEqualTo("KtNameReferenceExpression")
+                assertThat(receiverType.getFirstChild().getFirstChild().label).isEqualTo("MutableList")
+
+                val argumentList = receiverType.getFirstChild().getChild(1)
+                assertThat(argumentList.type).isEqualTo("KtTypeArgumentList")
+                assertThat(argumentList.label).isEqualTo("")
+
+                val typeProjection = argumentList.getFirstChild()
+                assertThat(typeProjection.type).isEqualTo("KtTypeProjection")
+                assertThat(typeProjection.label).isEqualTo("")
+
+                assertThat(typeProjection.getFirstChild().type).isEqualTo("KtTypeReference")
+                assertThat(typeProjection.getFirstChild().label).isEqualTo("")
+
+                val userType = typeProjection.getFirstChild().getFirstChild()
+                assertThat(userType.type).isEqualTo("KtUserType")
+                assertThat(userType.label).isEqualTo("")
+
+                assertThat(userType.getFirstChild().type).isEqualTo("KtNameReferenceExpression")
+                assertThat(userType.getFirstChild().label).isEqualTo("T")
             }
 
 
@@ -429,7 +516,14 @@ fun read(b: Array<Byte>, off: Int = 0, len: Int = b.size) {
             And("the second children should by a KtTypeReference, Int"){
                 val receiverType = namedFunctionNode.getChild(1)
                 assertThat(receiverType.type).isEqualTo("KtTypeReference")
-                assertThat(receiverType.label).isEqualTo("Int")
+                assertThat(receiverType.label).isEqualTo("")
+
+                val userType = receiverType.getFirstChild()
+                assertThat(userType.type).isEqualTo("KtUserType")
+                assertThat(userType.label).isEqualTo("")
+
+                assertThat(userType.getFirstChild().type).isEqualTo("KtNameReferenceExpression")
+                assertThat(userType.getFirstChild().label).isEqualTo("Int")
 
             }
 
@@ -442,7 +536,14 @@ fun read(b: Array<Byte>, off: Int = 0, len: Int = b.size) {
             And("the fourth children should by a KtTypeReference which correspond to the return type, Int"){
                 val returnType = namedFunctionNode.getChild(3)
                 assertThat(returnType.type).isEqualTo("KtTypeReference")
-                assertThat(returnType.label).isEqualTo("Int")
+                assertThat(returnType.label).isEqualTo("")
+
+                val userType = returnType.getFirstChild()
+                assertThat(userType.type).isEqualTo("KtUserType")
+                assertThat(userType.label).isEqualTo("")
+
+                assertThat(userType.getFirstChild().type).isEqualTo("KtNameReferenceExpression")
+                assertThat(userType.getFirstChild().label).isEqualTo("Int")
             }
 
             And("The last children should be the function body, KtBlockExpression"){

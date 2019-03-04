@@ -316,8 +316,14 @@ class MyView : View {
                assertThat(superTypeEntry.type).isEqualTo("KtSuperTypeEntry")
                assertThat(superTypeEntry.label).isEqualTo("")
 
-               assertThat(superTypeEntry.getFirstChild().type).isEqualTo("KtTypeReference")
-               assertThat(superTypeEntry.getFirstChild().label).isEqualTo("View")
+               val typeReference = superTypeEntry.getFirstChild()
+               assertThat(typeReference.type).isEqualTo("KtTypeReference")
+               assertThat(typeReference.label).isEqualTo("")
+
+               assertThat(typeReference.getFirstChild().getFirstChild().type).isEqualTo("KtNameReferenceExpression")
+               assertThat(typeReference.getFirstChild().getFirstChild().label).isEqualTo("View")
+
+
            }
         }
 
@@ -814,8 +820,12 @@ class Example {
             }
 
             And("this property is delegated"){
-                assertThat(property.getFirstChild().type).isEqualTo("KtTypeReference")
-                assertThat(property.getFirstChild().label).isEqualTo("String")
+                val typeReference = property.getFirstChild()
+                assertThat(typeReference.type).isEqualTo("KtTypeReference")
+                assertThat(typeReference.label).isEqualTo("")
+
+                assertThat(typeReference.getFirstChild().getFirstChild().type).isEqualTo("KtNameReferenceExpression")
+                assertThat(typeReference.getFirstChild().getFirstChild().label).isEqualTo("String")
 
                 val delegation = property.getChild(1)
                 assertThat(delegation.type).isEqualTo("KtPropertyDelegate")
@@ -875,8 +885,12 @@ class Derived(b: Base) : Base by b
                 assertThat(superTypeEntry.getFirstChild().type).isEqualTo("KtDelegatedSuperTypeEntry")
                 assertThat(superTypeEntry.getFirstChild().label).isEqualTo("")
 
-                assertThat(superTypeEntry.getFirstChild().getFirstChild().type).isEqualTo("KtTypeReference")
-                assertThat(superTypeEntry.getFirstChild().getFirstChild().label).isEqualTo("Base")
+                val typeReference = superTypeEntry.getFirstChild().getFirstChild()
+                assertThat(typeReference.type).isEqualTo("KtTypeReference")
+                assertThat(typeReference.label).isEqualTo("")
+
+                assertThat(typeReference.getFirstChild().getFirstChild().type).isEqualTo("KtNameReferenceExpression")
+                assertThat(typeReference.getFirstChild().getFirstChild().label).isEqualTo("Base")
             }
 
 

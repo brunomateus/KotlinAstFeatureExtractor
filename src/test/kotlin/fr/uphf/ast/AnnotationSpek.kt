@@ -321,6 +321,7 @@ annotation class Fancy
             }
             When("the AST is retrieved") {
                 rootNode = getASTasJson(code)
+                printAST(rootNode)
             }
 
 
@@ -377,7 +378,10 @@ annotation class Fancy
 
                 val returnType = func.getChild(2)
                 assertThat(returnType.type).isEqualTo("KtTypeReference")
-                assertThat(returnType.label).isEqualTo("Int")
+                assertThat(returnType.label).isEqualTo("")
+
+                assertThat(returnType.getFirstChild().getFirstChild().type).isEqualTo("KtNameReferenceExpression")
+                assertThat(returnType.getFirstChild().getFirstChild().label).isEqualTo("Int")
             }
 
             And("this method should have a parameter named foo annotated with @Fancy"){

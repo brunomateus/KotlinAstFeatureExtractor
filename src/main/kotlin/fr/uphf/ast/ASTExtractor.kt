@@ -112,6 +112,8 @@ class ASTExtractor : KtTreeVisitorVoid() {
 				skipChildren = true
 				element.packageNameExpression?.text
 			}
+			is KtTypeProjection -> ""
+			is KtTypeReference -> ""
 			is KtModifierListOwner -> element.text //TODO: Should come after PrimaryContructor and PropertyAccessor
 			is KtDeclarationModifierList -> {
 				var modifiersList = element.text
@@ -142,12 +144,11 @@ class ASTExtractor : KtTreeVisitorVoid() {
 			is KtBlockStringTemplateEntry -> ""
 			is KtSuperExpression -> "super"
 			is KtCatchClause -> "catch"
-			is KtTypeProjection -> element.text //TODO
-			is KtTypeConstraint -> element.text //TODO
-			is KtTypeParameter -> element.text //TODO
-			is KtTypeArgumentList -> element.text //TODO
-			is KtTypeReference -> element.text //TODO
-			is KtTypeElement -> element.text //TODO
+			is KtNullableType -> ""
+			is KtUserType -> ""
+			is KtTypeConstraint -> ""
+			is KtTypeParameter -> ""
+			is KtTypeArgumentList -> ""
 			//is KtValueArgument -> if (element.getArgumentExpression() is KtLambdaExpression) "" else element.getArgumentExpression()?.text//named ?
 			is KtValueArgument -> ""
 			is KtValueArgumentName -> element.asName.asString() //TODO Do not visit its child
