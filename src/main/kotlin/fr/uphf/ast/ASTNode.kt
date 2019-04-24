@@ -1,8 +1,9 @@
 package fr.uphf.ast
 
 import com.beust.klaxon.Json
+import org.jetbrains.kotlin.psi.KtElement
 
-data class ASTNode(val type: String, val label: String, val children: MutableList<ASTNode> = emptyList<ASTNode>().toMutableList(),  @Json(ignored = true) @Transient var parent: ASTNode? = null ) {
+data class ASTNode(val type: String, val label: String, val children: MutableList<ASTNode> = emptyList<ASTNode>().toMutableList(),  @Json(ignored = true) @Transient var parent: ASTNode? = null ,  @Json(ignored = true) @Transient var ktelement: KtElement? = null) {
 
 	fun addChild(child: ASTNode){
 		val modifierList = children.find{ node -> child.type == "KtDeclarationModifierList" && node.type == child.type }

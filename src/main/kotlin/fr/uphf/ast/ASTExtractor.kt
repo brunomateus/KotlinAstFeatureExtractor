@@ -165,7 +165,7 @@ class ASTExtractor : KtTreeVisitorVoid() {
 			else -> ""
 		}
 
-		val childNode = ASTNode(type=element.javaClass.simpleName, label=label ?: "", children = granChildren, parent = currentAstNode )
+		val childNode = ASTNode(type=element.javaClass.simpleName, label=label ?: "", children = granChildren, parent = currentAstNode, ktelement = element)
 		childNode.setParentInChildren()
 		currentAstNode.addChild(childNode)
 		val previousAstNode = currentAstNode
