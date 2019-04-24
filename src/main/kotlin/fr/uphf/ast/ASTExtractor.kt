@@ -56,6 +56,7 @@ class ASTExtractor : KtTreeVisitorVoid() {
 				if(element.isInterface()){
 					val modifiers = listOf(ASTNode(type="ModifierEntry", label="interface"))
 					val modifierList = ASTNode(type="KtDeclarationModifierList", label="", children=modifiers.toMutableList())
+					modifiers.forEach{it.parent = modifierList}
 					granChildren.add(modifierList)
 				}
 				element.name
@@ -164,7 +165,8 @@ class ASTExtractor : KtTreeVisitorVoid() {
 			else -> ""
 		}
 
-		val childNode = ASTNode(type=element.javaClass.simpleName, label=label ?: "", children = granChildren)
+		val childNode = ASTNode(type=element.javaClass.simpleName, label=label ?: "", children = granChildren, parent = currentAstNode )
+		childNode.setParentInChildren()
 		currentAstNode.addChild(childNode)
 		val previousAstNode = currentAstNode
 		currentAstNode = childNode
