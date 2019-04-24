@@ -9,7 +9,7 @@ import org.jetbrains.kotlin.psi.*
  * @author Bruno Gois Mateus
  */
 class NamedAndDefaultArgumentDetector : FileAnalyzer() {
-	override fun analyze(file: KtFile): List<Finding> {
+	override fun analyze(file: KtElement): List<Finding> {
 		var findings = emptyList<Finding>().toMutableList()
 
 		file.accept(object : KtTreeVisitorVoid() {

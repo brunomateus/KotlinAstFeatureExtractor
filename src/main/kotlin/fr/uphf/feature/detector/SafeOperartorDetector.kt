@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.*
 
 class SafeOperartorDetector :  FileAnalyzer(){
-	override fun analyze(file: KtFile): List<Finding> {
+	override fun analyze(file: KtElement): List<Finding> {
 		var findings = emptyList<Finding>().toMutableList()
 
 		file.accept(object : KtTreeVisitorVoid() {

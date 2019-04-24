@@ -3,11 +3,12 @@ package fr.uphf.feature
 import fr.uphf.analyze.FileAnalyzer
 import fr.uphf.feature.detector.*
 import io.gitlab.arturbosch.detekt.api.Finding
+import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
 
 class FeatureDetector(vararg val detectors: FileAnalyzer): FileAnalyzer(){
 
-    override fun analyze(file: KtFile): List<Finding> {
+    override fun analyze(file: KtElement): List<Finding> {
         var results = emptyList<Finding>().toMutableList()
 
         for(detector in detectors){
@@ -19,7 +20,7 @@ class FeatureDetector(vararg val detectors: FileAnalyzer): FileAnalyzer(){
 
     companion object {
 
-        fun extractAll(file: KtFile): List<Finding> {
+        fun extractAll(file: KtElement): List<Finding> {
 
             return FeatureDetector(
                 DataClassDetector(),
@@ -34,6 +35,8 @@ class FeatureDetector(vararg val detectors: FileAnalyzer): FileAnalyzer(){
                     WhenExpressionDetector()
             ).analyze(file)
         }
+
+
     }
 
 }

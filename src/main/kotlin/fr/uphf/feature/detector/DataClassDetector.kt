@@ -3,6 +3,7 @@ package fr.uphf.feature.detector
 import fr.uphf.analyze.FileAnalyzer
 import io.gitlab.arturbosch.detekt.api.*
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 
@@ -13,7 +14,7 @@ class DataClassDetector : FileAnalyzer() {
 
 	val featureId = "data_class"
 
-	override fun analyze(file: KtFile): List<Finding> {
+	override fun analyze(file: KtElement): List<Finding> {
 
 		var findings = emptyList<Finding>().toMutableList()
 

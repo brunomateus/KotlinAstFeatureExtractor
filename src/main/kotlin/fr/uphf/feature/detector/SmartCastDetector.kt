@@ -5,7 +5,7 @@ import io.gitlab.arturbosch.detekt.api.*
 import org.jetbrains.kotlin.psi.*
 
 class SmartCastDetector :  FileAnalyzer(){
-	override fun analyze(file: KtFile): List<Finding> {
+	override fun analyze(file: KtElement): List<Finding> {
 		var findings = emptyList<Finding>().toMutableList()
 
 		file.accept(object : KtTreeVisitorVoid() {

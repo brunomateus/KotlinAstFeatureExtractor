@@ -10,7 +10,7 @@ import org.jetbrains.kotlin.psi.*
  */
 class DelegationDetector : FileAnalyzer() {
 
-	override fun analyze(file: KtFile): List<Finding> {
+	override fun analyze(file: KtElement): List<Finding> {
 
 		var findings = emptyList<Finding>().toMutableList()
 
