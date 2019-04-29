@@ -106,12 +106,12 @@ class InitOrderDemo(name: String) {
 
             And("Its should contains one property read-only named firstProperty"){
                 assertThat(classBody.getFirstChild().type).isEqualTo("KtProperty")
-                assertThat(classBody.getFirstChild().label).isEqualTo("val firstProperty")
+                assertThat(classBody.getFirstChild().label).isEqualTo("firstProperty")
             }
 
             And("Its should contains other property read-only named secondProperty"){
                 assertThat(classBody.getChild(2).type).isEqualTo("KtProperty")
-                assertThat(classBody.getChild(2).label).isEqualTo("val secondProperty")
+                assertThat(classBody.getChild(2).label).isEqualTo("secondProperty")
             }
 
             And("Its should contains two initializers block"){
@@ -204,15 +204,15 @@ class Bar {
                 property = ktclass.getFirstChild().getFirstChild()
 
                 assertThat(property.type).isEqualTo("KtProperty")
-                assertThat(property.label).isEqualTo("var stringRepresentation")
+                assertThat(property.label).isEqualTo("stringRepresentation")
             }
 
             And("this property should define property accessors"){
-                assertThat(property.getChild(1).type).isEqualTo("KtPropertyAccessor")
-                assertThat(property.getChild(1).label).isEqualTo("get")
-
                 assertThat(property.getChild(2).type).isEqualTo("KtPropertyAccessor")
-                assertThat(property.getChild(2).label).isEqualTo("set")
+                assertThat(property.getChild(2).label).isEqualTo("get")
+
+                assertThat(property.getChild(3).type).isEqualTo("KtPropertyAccessor")
+                assertThat(property.getChild(3).label).isEqualTo("set")
             }
         }
 
@@ -378,7 +378,7 @@ class Derived(
 
                 val prop = classBody.getFirstChild()
                 assertThat(prop.type).isEqualTo("KtProperty")
-                assertThat(prop.label).isEqualTo("val size")
+                assertThat(prop.label).isEqualTo("size")
 
                 val modifierList = prop.getFirstChild()
                 assertThat(modifierList.type).isEqualTo("KtDeclarationModifierList")
@@ -417,7 +417,7 @@ class Derived(
                 assertThat(class2Body.label).isEqualTo("")
 
                 assertThat(class2Body.getFirstChild().type).isEqualTo("KtProperty")
-                assertThat(class2Body.getFirstChild().label).isEqualTo("val size")
+                assertThat(class2Body.getFirstChild().label).isEqualTo("size")
 
                 val funcModifierList = class2Body.getFirstChild()
                     .getFirstChild()
@@ -696,7 +696,7 @@ class Bar : Foo() {
             And("The base class, $cls1Name, defines a open property"){
                 val method = classBody.getChild(1)
                 assertThat(method.type).isEqualTo("KtProperty")
-                assertThat(method.label).isEqualTo("val x")
+                assertThat(method.label).isEqualTo("x")
 
                 val modifierList = method.getFirstChild()
                 assertThat(modifierList.type).isEqualTo("KtDeclarationModifierList")
@@ -755,9 +755,9 @@ class Bar : Foo() {
                 assertThat(class2Body.label).isEqualTo("")
 
                 assertThat(class2Body.getChild(1).type).isEqualTo("KtProperty")
-                assertThat(class2Body.getChild(1).label).isEqualTo("val x")
+                assertThat(class2Body.getChild(1).label).isEqualTo("x")
 
-                val funcModifierList = class2Body.getChild(1).getFirstChild()
+                val funcModifierList = class2Body.getChild(1).getChild(1)
 
                 assertThat(funcModifierList.type).isEqualTo("KtDeclarationModifierList")
                 assertThat(funcModifierList.label).isEqualTo("")
@@ -816,7 +816,7 @@ class Example {
                 property = ktclass.getFirstChild().getFirstChild()
 
                 assertThat(property.type).isEqualTo("KtProperty")
-                assertThat(property.label).isEqualTo("var p")
+                assertThat(property.label).isEqualTo("p")
             }
 
             And("this property is delegated"){

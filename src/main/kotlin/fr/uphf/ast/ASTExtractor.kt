@@ -47,7 +47,15 @@ class ASTExtractor : KtTreeVisitorVoid() {
 			}
 			is KtAnnotationUseSiteTarget -> element.text
 			is KtAnnotation -> ""
-			is KtParameter -> if (element.valOrVarKeyword != null) "${element.valOrVarKeyword?.text} ${element.name}" else element.name
+			//is KtParameter -> if (element.valOrVarKeyword != null) "${element.valOrVarKeyword?.text} ${element.name}" else element.name
+			is KtParameter -> {
+				if (element.valOrVarKeyword != null) {
+					val vk = ASTNode(type="KtPropertyKeyword", label="${element.valOrVarKeyword?.text}")
+					granChildren.add(vk)
+				}
+				element.name
+			}
+
 			is KtLambdaArgument -> ""
 
 			//KtDeclaration
@@ -65,7 +73,14 @@ class ASTExtractor : KtTreeVisitorVoid() {
 			is KtAnonymousInitializer -> element.text //TODO
 			is KtNamedFunction -> element.name
 			is KtDestructuringDeclaration -> ""
-			is KtProperty -> "${element.valOrVarKeyword.text} ${element.name}" // should we inform if it is val or var ? if yes, how ?
+			//is KtProperty -> "${element.valOrVarKeyword.text} ${element.name}" // should we inform if it is val or var ? if yes, how ?
+			is KtProperty -> {
+				val vk = ASTNode(type="KtPropertyKeyword", label="${element.valOrVarKeyword?.text}")
+				granChildren.add(vk)
+
+				element.name
+			}
+
 			is KtTypeAlias -> element.name
 			is KtSecondaryConstructor -> ""
 			// end KtDeclaration

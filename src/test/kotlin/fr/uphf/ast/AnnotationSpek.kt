@@ -183,9 +183,11 @@ annotation class Fancy
             Then("The first parameter name foo should be read-only and annotated with @field:Ann"){
                 val p1 = constructorParameterList.getFirstChild()
                 assertThat(p1.type).isEqualTo("KtParameter")
-                assertThat(p1.label).isEqualTo("val foo")
+                assertThat(p1.label).isEqualTo("foo") //val
 
-                val modifierList = p1.getFirstChild()
+                val keywordvv = p1.getFirstChild()
+
+                val modifierList = p1.getChild(1)
                 val modifier = modifierList.getFirstChild()
                 assertThat(modifier.type).isEqualTo("KtAnnotationEntry")
                 assertThat(modifier.label).isEqualTo("")
@@ -200,9 +202,9 @@ annotation class Fancy
             And("The first parameter name bar should be read-only and annotated with @get:Ann"){
                 val p2 = constructorParameterList.getChild(1)
                 assertThat(p2.type).isEqualTo("KtParameter")
-                assertThat(p2.label).isEqualTo("val bar")
+                assertThat(p2.label).isEqualTo("bar")
 
-                val modifierList = p2.getFirstChild()
+                val modifierList = p2.getChild(1)
                 val modifier = modifierList.getFirstChild()
                 assertThat(modifier.type).isEqualTo("KtAnnotationEntry")
                 assertThat(modifier.label).isEqualTo("")
@@ -217,9 +219,9 @@ annotation class Fancy
             And("The first parameter name quux should be read-only and annotated with @param:Ann"){
                 val p3 = constructorParameterList.getChild(2)
                 assertThat(p3.type).isEqualTo("KtParameter")
-                assertThat(p3.label).isEqualTo("val quux")
+                assertThat(p3.label).isEqualTo("quux")
 
-                val modifierList = p3.getFirstChild()
+                val modifierList = p3.getChild(1)
                 val modifier = modifierList.getFirstChild()
                 assertThat(modifier.type).isEqualTo("KtAnnotationEntry")
                 assertThat(modifier.label).isEqualTo("")
