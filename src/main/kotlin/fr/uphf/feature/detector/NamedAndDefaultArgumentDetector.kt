@@ -34,20 +34,26 @@ class NamedAndDefaultArgumentDetector : FileAnalyzer() {
 
 			override fun visitValueArgumentList(list: KtValueArgumentList) {
 				super.visitValueArgumentList(list)
-				if(list.arguments.any{it.isNamed()}){
-					findings.add(Feature(id = "func_call_with_named_arg",
-						entity = Entity.from(list.parent))
-					)
-				}
 
-				list.arguments.forEach { argument ->
-					if(argument.isNamed()){
-						findings.add(
-							Feature(id = "named_arg",
-								entity = Entity.from(argument))
+				if(list.parent !is KtAnnotationEntry) {
+
+					if(list.arguments.any{it.isNamed()}){
+						findings.add(Feature(id = "func_call_with_named_arg",
+							entity = Entity.from(list.parent))
 						)
 					}
+
+					list.arguments.forEach { argument ->
+						if(argument.isNamed()){
+							findings.add(
+								Feature(id = "named_arg",
+									entity = Entity.from(argument))
+							)
+						}
+					}
+					
 				}
+
 			}
 
 
