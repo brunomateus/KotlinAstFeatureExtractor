@@ -1,5 +1,5 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.3.20'
+    id 'org.jetbrains.kotlin.jvm' version '1.3.21'
 }
 
 group 'fr.uphf'
@@ -11,16 +11,16 @@ repositories {
 }
 
 ext {
-    kotlin_version = '1.3.10'
+    kotlin_version = '1.3.21'
     klaxon_version = '5.0.1'
     assertj_version = '3.11.1'
-    spek_version = '2.0.0-rc.1'
+    spek_version = '2.0.1'
 }
 
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    compile "org.jetbrains.kotlin:kotlin-compiler-embeddable:1.3.0"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlin_version"
     compile("com.beust:klaxon:${klaxon_version}")
 
     compile("org.assertj:assertj-core:${assertj_version}")
