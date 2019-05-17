@@ -84,9 +84,14 @@ open class Outer : Base(), Contract{
 
                 val prop = classBody.getFirstChild()
                 assertThat(prop.type).isEqualTo("KtProperty")
-                assertThat(prop.label).isEqualTo("val a")
+                assertThat(prop.label).isEqualTo("a")
 
-                val modifierList = prop.getFirstChild()
+                val propertyKeyword = prop.getFirstChild()
+                assertThat(propertyKeyword.type).isEqualTo("KtPropertyKeyword")
+                assertThat(propertyKeyword.label).isEqualTo("val")
+
+
+                val modifierList = prop.getChild(1)
                 assertThat(modifierList.type).isEqualTo("KtDeclarationModifierList")
                 assertThat(modifierList.label).isEqualTo("")
 
@@ -97,9 +102,14 @@ open class Outer : Base(), Contract{
             And("The second property, it is open protected read-only and it is named b"){
                 val prop = classBody.getChild(1)
                 assertThat(prop.type).isEqualTo("KtProperty")
-                assertThat(prop.label).isEqualTo("val b")
+                assertThat(prop.label).isEqualTo("b")
 
-                val modifierList = prop.getFirstChild()
+                val propertyKeyword = prop.getFirstChild()
+                assertThat(propertyKeyword.type).isEqualTo("KtPropertyKeyword")
+                assertThat(propertyKeyword.label).isEqualTo("val")
+
+
+                val modifierList = prop.getChild(1)
                 assertThat(modifierList.type).isEqualTo("KtDeclarationModifierList")
                 assertThat(modifierList.label).isEqualTo("")
 
@@ -113,9 +123,14 @@ open class Outer : Base(), Contract{
             And("The third property, it is  internal read-only and it is named c"){
                 val prop = classBody.getChild(2)
                 assertThat(prop.type).isEqualTo("KtProperty")
-                assertThat(prop.label).isEqualTo("val c")
+                assertThat(prop.label).isEqualTo("c")
 
-                val modifierList = prop.getFirstChild()
+                val propertyKeyword = prop.getFirstChild()
+                assertThat(propertyKeyword.type).isEqualTo("KtPropertyKeyword")
+                assertThat(propertyKeyword.label).isEqualTo("val")
+
+
+                val modifierList = prop.getChild(1)
                 assertThat(modifierList.type).isEqualTo("KtDeclarationModifierList")
                 assertThat(modifierList.label).isEqualTo("")
 
@@ -126,7 +141,12 @@ open class Outer : Base(), Contract{
             And("The fourth property, it is  public(default) and it is named d"){
                 val fourthProp = classBody.getChild(3)
                 assertThat(fourthProp.type).isEqualTo("KtProperty")
-                assertThat(fourthProp.label).isEqualTo("var d")
+                assertThat(fourthProp.label).isEqualTo("d")
+
+                val propertyKeyword = fourthProp.getFirstChild()
+                assertThat(propertyKeyword.type).isEqualTo("KtPropertyKeyword")
+                assertThat(propertyKeyword.label).isEqualTo("var")
+
             }
 
             And("There is a protected inner class, named Nested, defined"){

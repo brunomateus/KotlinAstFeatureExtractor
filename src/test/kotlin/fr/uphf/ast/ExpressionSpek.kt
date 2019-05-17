@@ -50,7 +50,11 @@ fun main(args: Array<String>) {
 
                 assertThat(y.type).isEqualTo("KtProperty")
 
-                val prefixOperation = y.getFirstChild()
+                val propertyKeyword = y.getFirstChild()
+                assertThat(propertyKeyword.type).isEqualTo("KtPropertyKeyword")
+                assertThat(propertyKeyword.label).isEqualTo("val")
+
+                val prefixOperation = y.getChild(1)
                 assertThat(prefixOperation.type).isEqualTo("KtPrefixExpression")
                 assertThat(prefixOperation.label).isEqualTo("")
 
@@ -68,7 +72,11 @@ fun main(args: Array<String>) {
 
                 assertThat(z.type).isEqualTo("KtProperty")
 
-                val postfixOperation = z.getFirstChild()
+                val propertyKeyword = z.getFirstChild()
+                assertThat(propertyKeyword.type).isEqualTo("KtPropertyKeyword")
+                assertThat(propertyKeyword.label).isEqualTo("val")
+
+                val postfixOperation = z.getChild(1)
                 assertThat(postfixOperation.type).isEqualTo("KtPostfixExpression")
                 assertThat(postfixOperation.label).isEqualTo("")
 
@@ -84,7 +92,11 @@ fun main(args: Array<String>) {
 
                 assertThat(w.type).isEqualTo("KtProperty")
 
-                val binaryExpr = w.getFirstChild()
+                val propertyKeyword = w.getFirstChild()
+                assertThat(propertyKeyword.type).isEqualTo("KtPropertyKeyword")
+                assertThat(propertyKeyword.label).isEqualTo("val")
+
+                val binaryExpr = w.getChild(1)
                 assertThat(binaryExpr.type).isEqualTo("KtBinaryExpression")
                 assertThat(binaryExpr.label).isEqualTo("")
 
@@ -103,7 +115,11 @@ fun main(args: Array<String>) {
 
                 assertThat(b.type).isEqualTo("KtProperty")
 
-                val prefixOperation = b.getFirstChild()
+                val propertyKeyword = b.getFirstChild()
+                assertThat(propertyKeyword.type).isEqualTo("KtPropertyKeyword")
+                assertThat(propertyKeyword.label).isEqualTo("val")
+
+                val prefixOperation = b.getChild(1)
                 assertThat(prefixOperation.type).isEqualTo("KtPrefixExpression")
                 assertThat(prefixOperation.label).isEqualTo("")
 
@@ -243,12 +259,17 @@ class A { // implicit label @A
             }
 
             And("A property read-only a should receive a KtThisExpression that references the class A"){
+
                 val property = funcBody.getFirstChild()
 
                 assertThat(property.type).isEqualTo("KtProperty")
-                assertThat(property.label).isEqualTo("val a")
+                assertThat(property.label).isEqualTo("a")
 
-                val thisExpr = property.getFirstChild()
+                val propertyKeyword = property.getFirstChild()
+                assertThat(propertyKeyword.type).isEqualTo("KtPropertyKeyword")
+                assertThat(propertyKeyword.label).isEqualTo("val")
+
+                val thisExpr = property.getChild(1)
                 assertThat(thisExpr.type).isEqualTo("KtThisExpression")
                 assertThat(thisExpr.label).isEqualTo("this@A")
 
@@ -268,9 +289,13 @@ class A { // implicit label @A
                 val property = funcBody.getChild(1)
 
                 assertThat(property.type).isEqualTo("KtProperty")
-                assertThat(property.label).isEqualTo("val b")
+                assertThat(property.label).isEqualTo("b")
 
-                val thisExpr = property.getFirstChild()
+                val propertyKeyword = property.getFirstChild()
+                assertThat(propertyKeyword.type).isEqualTo("KtPropertyKeyword")
+                assertThat(propertyKeyword.label).isEqualTo("val")
+
+                val thisExpr = property.getChild(1)
                 assertThat(thisExpr.type).isEqualTo("KtThisExpression")
                 assertThat(thisExpr.label).isEqualTo("this@B")
 
@@ -290,9 +315,13 @@ class A { // implicit label @A
                 val property = funcBody.getChild(2)
 
                 assertThat(property.type).isEqualTo("KtProperty")
-                assertThat(property.label).isEqualTo("val c")
+                assertThat(property.label).isEqualTo("c")
 
-                val thisExpr = property.getFirstChild()
+                val propertyKeyword = property.getFirstChild()
+                assertThat(propertyKeyword.type).isEqualTo("KtPropertyKeyword")
+                assertThat(propertyKeyword.label).isEqualTo("val")
+
+                val thisExpr = property.getChild(1)
                 assertThat(thisExpr.type).isEqualTo("KtThisExpression")
                 assertThat(thisExpr.label).isEqualTo("this")
 
@@ -306,9 +335,13 @@ class A { // implicit label @A
                 val property = funcBody.getChild(3)
 
                 assertThat(property.type).isEqualTo("KtProperty")
-                assertThat(property.label).isEqualTo("val funLit")
+                assertThat(property.label).isEqualTo("funLit")
 
-                val thisExpr = property.getFirstChild()
+                val propertyKeyword = property.getFirstChild()
+                assertThat(propertyKeyword.type).isEqualTo("KtPropertyKeyword")
+                assertThat(propertyKeyword.label).isEqualTo("val")
+
+                val thisExpr = property.getChild(1)
                 assertThat(thisExpr.type).isEqualTo("KtLabeledExpression")
                 assertThat(thisExpr.label).isEqualTo("lambda")
 

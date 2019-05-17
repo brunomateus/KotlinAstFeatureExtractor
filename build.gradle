@@ -25,16 +25,20 @@ dependencies {
 
     compile("org.assertj:assertj-core:${assertj_version}")
 
-    compile ("org.spekframework.spek2:spek-dsl-jvm:${spek_version}")  {
-        exclude group: 'org.jetbrains.kotlin'
-    }
-    compile ("org.spekframework.spek2:spek-runner-junit5:${spek_version}") {
-        exclude group: 'org.junit.platform'
+    testImplementation ("org.spekframework.spek2:spek-dsl-jvm:${spek_version}")  {
         exclude group: 'org.jetbrains.kotlin'
     }
 
+
     // spek requires kotlin-reflect, can be omitted if already in the classpath
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.2.0'
+
+    testRuntimeOnly ("org.spekframework.spek2:spek-runner-junit5:${spek_version}") {
+        exclude group: 'org.junit.platform'
+        exclude group: 'org.jetbrains.kotlin'
+    }
 }
 
 // setup the test task

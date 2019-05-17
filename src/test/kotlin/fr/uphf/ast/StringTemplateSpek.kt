@@ -42,7 +42,12 @@ object StringTemplateSpek : Spek({
                 assertThat(classBody.label).isEqualTo("")
 
                 assertThat(classBody.getFirstChild().type).isEqualTo("KtProperty")
-                assertThat(classBody.getFirstChild().label).isEqualTo("val names")
+                assertThat(classBody.getFirstChild().label).isEqualTo("names")
+
+                val propertyKeyword = classBody.getFirstChild().getFirstChild()
+                assertThat(propertyKeyword.type).isEqualTo("KtPropertyKeyword")
+                assertThat(propertyKeyword.label).isEqualTo("val")
+
 
                 assertThat(classBody.getChild(1).type).isEqualTo("KtNamedFunction")
                 assertThat(classBody.getChild(1).label).isEqualTo("addName")

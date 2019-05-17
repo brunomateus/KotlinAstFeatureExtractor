@@ -106,19 +106,28 @@ interface MyInterface {
                 classBody = ktclass.getChild(1)
 
                 assertThat(classBody.getFirstChild().type).isEqualTo("KtProperty")
-                assertThat(classBody.getFirstChild().label).isEqualTo("val prop")
+                assertThat(classBody.getFirstChild().label).isEqualTo("prop")
 
-                assertThat(classBody.getFirstChild().children).hasSize(1)
+                val propertyKeyword = classBody.getFirstChild().getFirstChild()
+                assertThat(propertyKeyword.type).isEqualTo("KtPropertyKeyword")
+                assertThat(propertyKeyword.label).isEqualTo("val")
+
+                assertThat(classBody.getFirstChild().children).hasSize(2)
             }
 
             And("The second property, named propertyWithImplementation, has a get accessor defined") {
                 val property = classBody.getChild(1)
                 assertThat(property.type).isEqualTo("KtProperty")
-                assertThat(property.label).isEqualTo("val propertyWithImplementation")
+                assertThat(property.label).isEqualTo("propertyWithImplementation")
 
-                assertThat(property.children).hasSize(2)
+                val propertyKeyword = property.getFirstChild()
+                assertThat(propertyKeyword.type).isEqualTo("KtPropertyKeyword")
+                assertThat(propertyKeyword.label).isEqualTo("val")
 
-                val propertyAccessor = property.getChild(1)
+
+                assertThat(property.children).hasSize(3)
+
+                val propertyAccessor = property.getChild(2)
                 assertThat(propertyAccessor.type).isEqualTo("KtPropertyAccessor")
                 assertThat(propertyAccessor.label).isEqualTo("get")
             }

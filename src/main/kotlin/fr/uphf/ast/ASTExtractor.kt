@@ -5,12 +5,6 @@ import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 
 class ASTExtractor : KtTreeVisitorVoid() {
 
-	override fun visitArgument(argument: KtValueArgument) {
-		//super.visitArgument(argument)
-		super.visitKtElement(argument)
-
-	}
-
 	lateinit var rootNode: ASTNode
 	lateinit var currentAstNode: ASTNode
 

@@ -380,7 +380,11 @@ class Derived(
                 assertThat(prop.type).isEqualTo("KtProperty")
                 assertThat(prop.label).isEqualTo("size")
 
-                val modifierList = prop.getFirstChild()
+                val propertyKeyword = prop.getFirstChild()
+                assertThat(propertyKeyword.type).isEqualTo("KtPropertyKeyword")
+                assertThat(propertyKeyword.label).isEqualTo("val")
+
+                val modifierList = prop.getChild(1)
                 assertThat(modifierList.type).isEqualTo("KtDeclarationModifierList")
                 assertThat(modifierList.label).isEqualTo("")
 
@@ -419,8 +423,13 @@ class Derived(
                 assertThat(class2Body.getFirstChild().type).isEqualTo("KtProperty")
                 assertThat(class2Body.getFirstChild().label).isEqualTo("size")
 
-                val funcModifierList = class2Body.getFirstChild()
+                val propertyKeyword = class2Body.getFirstChild()
                     .getFirstChild()
+                assertThat(propertyKeyword.type).isEqualTo("KtPropertyKeyword")
+                assertThat(propertyKeyword.label).isEqualTo("val")
+
+                val funcModifierList = class2Body.getFirstChild().getChild(1)
+
                 assertThat(funcModifierList.type).isEqualTo("KtDeclarationModifierList")
                 assertThat(funcModifierList.label).isEqualTo("")
 
@@ -698,7 +707,11 @@ class Bar : Foo() {
                 assertThat(method.type).isEqualTo("KtProperty")
                 assertThat(method.label).isEqualTo("x")
 
-                val modifierList = method.getFirstChild()
+                val propertyKeyword = method.getFirstChild()
+                assertThat(propertyKeyword.type).isEqualTo("KtPropertyKeyword")
+                assertThat(propertyKeyword.label).isEqualTo("val")
+
+                val modifierList = method.getChild(1)
                 assertThat(modifierList.type).isEqualTo("KtDeclarationModifierList")
                 assertThat(modifierList.label).isEqualTo("")
 
@@ -768,7 +781,7 @@ class Bar : Foo() {
             }
 
             And("The new get acessor implementation should call the superclass implementation"){
-                val propertyAccessor = class2Body.getChild(1).getChild(2)
+                val propertyAccessor = class2Body.getChild(1).getChild(3)
 
                 assertThat(propertyAccessor.type).isEqualTo("KtPropertyAccessor")
                 assertThat(propertyAccessor.label).isEqualTo("get")
@@ -820,14 +833,19 @@ class Example {
             }
 
             And("this property is delegated"){
-                val typeReference = property.getFirstChild()
+
+                val propertyKeyword = property.getFirstChild()
+                assertThat(propertyKeyword.type).isEqualTo("KtPropertyKeyword")
+                assertThat(propertyKeyword.label).isEqualTo("var")
+
+                val typeReference = property.getChild(1)
                 assertThat(typeReference.type).isEqualTo("KtTypeReference")
                 assertThat(typeReference.label).isEqualTo("")
 
                 assertThat(typeReference.getFirstChild().getFirstChild().type).isEqualTo("KtNameReferenceExpression")
                 assertThat(typeReference.getFirstChild().getFirstChild().label).isEqualTo("String")
 
-                val delegation = property.getChild(1)
+                val delegation = property.getChild(2)
                 assertThat(delegation.type).isEqualTo("KtPropertyDelegate")
                 assertThat(delegation.label).isEqualTo("")
 

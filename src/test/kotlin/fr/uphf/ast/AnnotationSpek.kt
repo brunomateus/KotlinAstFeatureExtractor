@@ -272,11 +272,15 @@ annotation class Fancy
                 prop = clsBody.getFirstChild()
 
                 assertThat(prop.type).isEqualTo("KtProperty")
-                assertThat(prop.label).isEqualTo("var collaborator")
+                assertThat(prop.label).isEqualTo("collaborator")
             }
 
             And("This property should be annotated by two annotation, Inject and VisibleForTesting, with set as target"){
-                val modifierList = prop.getFirstChild()
+                val propertyKeyword = prop.getFirstChild()
+                assertThat(propertyKeyword.type).isEqualTo("KtPropertyKeyword")
+                assertThat(propertyKeyword.label).isEqualTo("var")
+
+                val modifierList = prop.getChild(1)
                 assertThat(modifierList.type).isEqualTo("KtDeclarationModifierList")
                 assertThat(modifierList.label).isEqualTo("")
 
