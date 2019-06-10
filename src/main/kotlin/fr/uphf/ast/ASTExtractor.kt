@@ -105,7 +105,7 @@ class ASTExtractor : KtTreeVisitorVoid() {
 			is KtLambdaExpression -> ""
 			is KtThisExpression -> element.text
 			is KtWhenExpression -> "when"
-			is KtObjectLiteralExpression -> element.text //TODO
+			is KtObjectLiteralExpression -> ""
 			is KtThrowExpression -> "throw"
 			is KtReturnExpression -> "return"
 			is KtContinueExpression -> "continue"
