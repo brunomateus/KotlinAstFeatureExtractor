@@ -32,7 +32,12 @@ class FeatureDetector(vararg val detectors: FileAnalyzer): FileAnalyzer(){
                     RangeExpressionDetector(),
                     SafeOperartorDetector(),
                     SmartCastDetector(),
-                    WhenExpressionDetector()
+                    WhenExpressionDetector(),
+                    SingletonDetector(),
+                    CompanionDetector(),
+                    InlineFunctionDetector(),
+                    TypeInferenceDetector(),
+                    StringTemplateDetector()
             ).analyze(file)
         }
 

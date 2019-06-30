@@ -2,10 +2,7 @@ package fr.uphf.feature.detector
 
 import fr.uphf.analyze.FileAnalyzer
 import io.gitlab.arturbosch.detekt.api.*
-import org.jetbrains.kotlin.psi.KtClass
-import org.jetbrains.kotlin.psi.KtElement
-import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
+import org.jetbrains.kotlin.psi.*
 
 /**
  * @author Bruno Gois Mateus
