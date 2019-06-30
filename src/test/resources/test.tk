@@ -6,6 +6,20 @@ class KotlinGreetingJoiner(val greeter: Greeter) {
 
     val names = ArrayList<String?>()
 
+    val x = 1
+
+    val a = "asassda $x"
+
+    val s = "abc"
+    println("$s.length is ${s.length}")
+
+    val a = 5
+    val b = 6
+
+    val myString = """
+    |${if (a > b) a else b}
+    """
+
     fun addName(name: String?) {
         names.add(name)
     }
