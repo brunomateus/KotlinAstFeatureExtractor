@@ -39,6 +39,13 @@ class Point(private val x: Int = 0, private val y: Int = 10) {
 		fun main() {
 			val (x, y) = Point()
 			val (a, b, c) = Point3D(1, 1, 1)
+
+            val map = mutableMapOf<Int,String>() 
+			map.put(1,"Ishita") 
+			map.put(2,"Kamal") 
+			map.put(3,"Kanika")
+			// Destructuring a map entry into key and values 
+			val newmap = map.mapValues { (key,value) -> "Hello" }
 		}
 """.trimIndent()
             }
@@ -52,13 +59,13 @@ class Point(private val x: Int = 0, private val y: Int = 10) {
 
             }
 
-            val nFinding = 2
+            val nFinding = 3
             Then("it should report $nFinding findings") {
                 assertThat(result.map { it.value.size }.sum()).isEqualTo(nFinding)
             }
 
             And("two uses of super delegation"){
-                assertThat(result["destructuring_declaration" ]).hasSize(2)
+                assertThat(result["destructuring_declaration" ]).hasSize(nFinding)
             }
 
 
