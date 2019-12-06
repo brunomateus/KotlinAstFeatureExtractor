@@ -34,6 +34,7 @@ object SafeOperatorDectectorSpek : Spek({
 
 			val k = b!!.length
 
+            val z = b!!
 		}
 """.trimIndent()
             }
@@ -47,17 +48,17 @@ object SafeOperatorDectectorSpek : Spek({
 
             }
 
-            val nFinding = 3
+            val nFinding = 4
             Then("it should report $nFinding findings") {
                 assertThat(result.map { it.value.size }.sum()).isEqualTo(nFinding)
             }
 
-            And("report 2 uses of smart cast"){
+            And("report 2 uses of safe call"){
                 assertThat(result["safe_call" ]).hasSize(2)
             }
 
-            And("report 1 uses of smart cast"){
-                assertThat(result["unsafe_call" ]).hasSize(1)
+            And("report 1 uses of unsafe call"){
+                assertThat(result["unsafe_call" ]).hasSize(2)
             }
 
 
