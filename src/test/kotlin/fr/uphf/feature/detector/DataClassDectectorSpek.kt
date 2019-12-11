@@ -1,7 +1,7 @@
 package fr.uphf.feature.detector
 
-import fr.uphf.analyze.DetectionResult
 import fr.uphf.analyze.compileTo
+import fr.uphf.analyze.getResult
 import io.gitlab.arturbosch.detekt.api.Finding
 import org.assertj.core.api.Assertions.*
 import org.jetbrains.kotlin.psi.KtFile
@@ -32,7 +32,7 @@ data class Point(val x: Int, val y: Int)
 
             Then("it should report only one feature whose id is data_class") {
 
-                val result = DetectionResult.from(findings)
+                val result = getResult(findings)
 
                 assertThat(result["data_class"]).hasSize(1)
 

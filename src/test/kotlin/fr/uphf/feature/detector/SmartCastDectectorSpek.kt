@@ -1,7 +1,7 @@
 package fr.uphf.feature.detector
 
-import fr.uphf.analyze.DetectionResult
 import fr.uphf.analyze.compileTo
+import fr.uphf.analyze.getResult
 import io.gitlab.arturbosch.detekt.api.Finding
 import org.assertj.core.api.Assertions.*
 import org.jetbrains.kotlin.psi.KtFile
@@ -19,7 +19,7 @@ object SmartCastDectectorSpek : Spek({
 
             Given("Different ways of using smart cast"){
                 code = """
-        fun demo(x: Any) {
+            fun demo(x: Any) {
 				if (x is String) {
 					print(x.length) // x is automatically cast to String
 				}
@@ -53,7 +53,7 @@ object SmartCastDectectorSpek : Spek({
                 file = compileTo(code)
                 val detector = SmartCastDetector()
                 val findings = detector.analyze(file)
-                result = DetectionResult.from(findings)
+                result = getResult(findings)
 
             }
 

@@ -1,7 +1,7 @@
 package fr.uphf.feature.detector
 
-import fr.uphf.analyze.DetectionResult
 import fr.uphf.analyze.compileTo
+import fr.uphf.analyze.getResult
 import io.gitlab.arturbosch.detekt.api.Finding
 import org.assertj.core.api.Assertions.*
 import org.jetbrains.kotlin.psi.KtFile
@@ -55,7 +55,7 @@ class Point(private val x: Int = 0, private val y: Int = 10) {
                 file = compileTo(code)
                 val destructuringDeclarationDetector = DestructuringDeclarationDetector()
                 val findings = destructuringDeclarationDetector.analyze(file)
-                result = DetectionResult.from(findings)
+                result = getResult(findings)
 
             }
 

@@ -1,7 +1,7 @@
 package fr.uphf.feature.detector
 
-import fr.uphf.analyze.DetectionResult
 import fr.uphf.analyze.compileTo
+import fr.uphf.analyze.getResult
 import io.gitlab.arturbosch.detekt.api.Finding
 import org.assertj.core.api.Assertions.*
 import org.jetbrains.kotlin.psi.KtFile
@@ -56,7 +56,7 @@ class User {
                 file = compileTo(code)
                 val delegationDetector = DelegationDetector()
                 val findings = delegationDetector.analyze(file)
-                result = DetectionResult.from(findings)
+                result = getResult(findings)
 
             }
 
