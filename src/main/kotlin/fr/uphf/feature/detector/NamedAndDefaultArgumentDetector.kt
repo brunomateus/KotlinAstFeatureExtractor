@@ -21,15 +21,6 @@ class NamedAndDefaultArgumentDetector : FileAnalyzer() {
 							entity = Entity.from(ktlist.parent))
 					)
 				}
-
-				ktlist.parameters.forEach { parameter ->
-					if (parameter.hasDefaultValue()) {
-						findings.add(
-							Feature(id = "parameter_with_default_value",
-								entity = Entity.from(parameter))
-						)
-					}
-				}
 			}
 
 			override fun visitValueArgumentList(list: KtValueArgumentList) {
@@ -43,15 +34,6 @@ class NamedAndDefaultArgumentDetector : FileAnalyzer() {
 						)
 					}
 
-					list.arguments.forEach { argument ->
-						if(argument.isNamed()){
-							findings.add(
-								Feature(id = "named_arg",
-									entity = Entity.from(argument))
-							)
-						}
-					}
-					
 				}
 
 			}
