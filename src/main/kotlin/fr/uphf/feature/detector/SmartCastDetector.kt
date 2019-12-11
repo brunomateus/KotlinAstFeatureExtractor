@@ -10,12 +10,14 @@ class SmartCastDetector :  FileAnalyzer(){
 
 		file.accept(object : KtTreeVisitorVoid() {
 
-			override fun visitIsExpression(expression: KtIsExpression) {
-				super.visitIsExpression(expression)
-				findings.add(
-					Feature(id = "smart_cast",
-						entity = Entity.from(expression))
-				)
+			override fun visitIfExpression(expression: KtIfExpression) {
+				super.visitIfExpression(expression)
+				if (expression.condition is KtIsExpression) {
+					findings.add(
+						Feature(id = "smart_cast",
+							entity = Entity.from(expression))
+					)
+				}
 			}
 
 			override fun visitWhenConditionIsPattern(condition: KtWhenConditionIsPattern) {

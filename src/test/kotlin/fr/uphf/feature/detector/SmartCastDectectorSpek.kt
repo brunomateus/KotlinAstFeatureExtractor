@@ -1,6 +1,7 @@
 package fr.uphf.feature.detector
 
 import fr.uphf.analyze.compileTo
+import fr.uphf.analyze.getASTasStringJson
 import fr.uphf.analyze.getResult
 import io.gitlab.arturbosch.detekt.api.Finding
 import org.assertj.core.api.Assertions.*
@@ -36,6 +37,8 @@ object SmartCastDectectorSpek : Spek({
 				else {
 					print(obj.length)
 				}
+
+                val z = obj is String
 			}
 
 			fun smartWhen(x: Any) {
