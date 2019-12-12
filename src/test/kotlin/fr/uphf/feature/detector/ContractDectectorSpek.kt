@@ -42,6 +42,10 @@ fun foo(s: String?) {
 fun contract(){
 	println("hello world")
 }
+
+fun main(){
+    contract()
+}
 """.trimIndent()
             }
 

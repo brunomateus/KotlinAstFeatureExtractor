@@ -17,9 +17,9 @@ class ContractDetector : FileAnalyzer() {
 
 		file.accept(object : KtTreeVisitorVoid() {
 
-			override fun visitReferenceExpression(expression: KtReferenceExpression) {
-				super.visitReferenceExpression(expression)
-				if (expression.text == "contract"){
+			override fun visitCallExpression(expression: KtCallExpression) {
+				super.visitCallExpression(expression)
+				if (expression.calleeExpression?.text == "contract" && expression.lambdaArguments.isNotEmpty()){
 					findings.add(
 						Feature(id = "contract",
 							entity = Entity.from(expression))
