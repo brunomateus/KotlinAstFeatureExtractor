@@ -2,9 +2,11 @@ package fr.uphf.feature.detector
 
 import fr.uphf.analyze.FileAnalyzer
 import io.gitlab.arturbosch.detekt.api.*
+import org.jetbrains.kotlin.js.translate.declaration.hasCustomGetter
 import org.jetbrains.kotlin.psi.*
 
 class TypeInferenceDetector :  FileAnalyzer(){
+
 	override fun analyze(file: KtElement): List<Finding> {
 		var findings = emptyList<Finding>().toMutableList()
 
@@ -14,7 +16,7 @@ class TypeInferenceDetector :  FileAnalyzer(){
 			override fun visitProperty(property: KtProperty) {
 				super.visitProperty(property)
 
-				if(property.typeReference == null && property.hasInitializer()) {
+				if(property.typeReference == null && (property.hasDelegateExpressionOrInitializer() || property.hasCustomGetter())) {
 					findings.add(
 						Feature(id = "inference",
 							entity = Entity.from(property))
@@ -35,6 +37,8 @@ class TypeInferenceDetector :  FileAnalyzer(){
 				}
 			}
 		})
+
+
 
 		return findings.toList()
 	}
