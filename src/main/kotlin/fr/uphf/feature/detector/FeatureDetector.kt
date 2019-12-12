@@ -1,15 +1,17 @@
 package fr.uphf.feature
 
 import fr.uphf.analyze.FileAnalyzer
+import fr.uphf.analyze.compileTo
 import fr.uphf.feature.detector.*
 import io.gitlab.arturbosch.detekt.api.Finding
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
+import java.io.File
 
-class FeatureDetector(vararg val detectors: FileAnalyzer): FileAnalyzer(){
+class FeatureDetector(private vararg val detectors: FileAnalyzer): FileAnalyzer(){
 
     override fun analyze(file: KtElement): List<Finding> {
-        var results = emptyList<Finding>().toMutableList()
+        val results = emptyList<Finding>().toMutableList()
 
         for(detector in detectors){
             results.addAll(detector.analyze(file))
@@ -24,21 +26,41 @@ class FeatureDetector(vararg val detectors: FileAnalyzer): FileAnalyzer(){
 
             return FeatureDetector(
                 DataClassDetector(),
-                    DelegationDetector(),
-                    DestructuringDeclarationDetector(),
-                    ExtensionFunctionAndOverloadedOpDetector(),
-                    LambdaDetector(),
-                    NamedAndDefaultArgumentDetector(),
-                    RangeExpressionDetector(),
-                    SafeOperartorDetector(),
-                    SmartCastDetector(),
-                    WhenExpressionDetector(),
-                    SingletonDetector(),
-                    CompanionDetector(),
-                    InlineFunctionDetector(),
-                    TypeInferenceDetector(),
-                    StringTemplateDetector()
+                DelegationDetector(),
+                DestructuringDeclarationDetector(),
+                ExtensionFunctionAndOverloadedOpDetector(),
+                LambdaDetector(),
+                NamedAndDefaultArgumentDetector(),
+                RangeExpressionDetector(),
+                SafeOperartorDetector(),
+                SmartCastDetector(),
+                WhenExpressionDetector(),
+                SingletonDetector(),
+                CompanionDetector(),
+                InlineFunctionDetector(),
+                TypeInferenceDetector(),
+                StringTemplateDetector(),
+                InfixFunctionDetector(),
+                InlineKlassDetector(),
+                TypeAliasDetector(),
+                TailrecFunctionDetector(),
+                ContractDetector(),
+                CoroutineDetector()
             ).analyze(file)
+        }
+
+        fun extractAll(file: File): List<Finding> {
+            return extractAll(compileTo(file.readText().replace("\r", ""), file.path))
+        }
+
+        fun extractAll(files: List<File>): List<Finding> {
+            val findings = emptyList<Finding>().toMutableList()
+            files.forEach { file -> extractAll(file).also{
+                    findings.addAll(it)
+                }
+            }
+
+            return findings.toList()
         }
 
 
