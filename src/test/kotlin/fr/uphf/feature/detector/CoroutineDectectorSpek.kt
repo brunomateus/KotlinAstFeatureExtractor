@@ -55,20 +55,19 @@ fun main() = runBlocking { // this: CoroutineScope
             lateinit var result: Map<String, List<Finding>>
             When("the file is analyzed") {
                 file = compileTo(code)
-                println(getASTasStringJson(code))
                 val detector = CoroutineDetector()
                 val findings = detector.analyze(file)
                 result = getResult(findings)
 
             }
 
-            val nFinding = 1
+            val nFinding = 2
             Then("it should report $nFinding findings") {
                 assertThat(result.map { it.value.size }.sum()).isEqualTo(nFinding)
             }
 
-            And("report 1 uses of coroutine"){
-                assertThat(result["coroutine"]).hasSize(1)
+            And("report 2 uses of coroutine"){
+                assertThat(result["coroutine"]).hasSize(2)
             }
 
 

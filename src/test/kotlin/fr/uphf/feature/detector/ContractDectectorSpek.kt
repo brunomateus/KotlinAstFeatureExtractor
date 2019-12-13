@@ -19,6 +19,9 @@ object ContractDectectorSpek : Spek({
 
             Given("Different contract are used"){
                 code = """
+
+import kotlin.contracts.contract
+
 fun String?.isNullOrEmpty(): Boolean {
     contract {
         returns(false) implies (this@isNullOrEmpty != null)

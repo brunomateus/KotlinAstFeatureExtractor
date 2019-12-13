@@ -12,6 +12,7 @@ class CoroutineDetector : FileAnalyzer() {
 	override fun analyze(file: KtElement): List<Finding> {
 
 		var import = false
+		val findings = mutableListOf<Finding>()
 		var keyword = false
 
 		file.accept(object : KtTreeVisitorVoid() {
@@ -32,14 +33,21 @@ class CoroutineDetector : FileAnalyzer() {
 				super.visitCallExpression(expression)
 				if (coroutinesKeywords.contains(expression.calleeExpression?.text)){
 					keyword = true
+					if (expression.calleeExpression?.text == "launch" && expression.lambdaArguments.isNotEmpty()){
+						findings.add(Feature(id = "coroutine", entity = Entity.from(expression)))
+					}
 				}
 
 			}
 		})
 
-		if (import and keyword) {
-			return listOf(Feature(id = "coroutine", entity = Entity.from(file)))
+		return if (import) {
+			if(findings.isEmpty() && keyword) {
+				findings.add(Feature(id = "coroutine", entity = Entity.from(file)))
+			}
+			findings.toList()
+		} else {
+			emptyList()
 		}
-		return emptyList()
 	}
 }
