@@ -26,6 +26,7 @@ class FeatureDetector(private vararg val detectors: FileAnalyzer): FileAnalyzer(
 
             return FeatureDetector(
                 DataClassDetector(),
+                SealedClassDetector(),
                 DelegationDetector(),
                 DestructuringDeclarationDetector(),
                 ExtensionFunctionAndOverloadedOpDetector(),
@@ -45,7 +46,8 @@ class FeatureDetector(private vararg val detectors: FileAnalyzer): FileAnalyzer(
                 TypeAliasDetector(),
                 TailrecFunctionDetector(),
                 ContractDetector(),
-                CoroutineDetector()
+                CoroutineDetector(),
+                OverloadDetector()
             ).analyze(file)
         }
 
